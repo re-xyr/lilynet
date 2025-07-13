@@ -11,6 +11,16 @@ ewr1: Node = Node(
     stable_link_ipv6="fe80::1",
     peers=[
         Peer(
+            name="darkpoint",
+            asn=4242420150,
+            endpoint="iad.darkpoint.xyz:21919",
+            pubkey="1o0XfQvBM1gqknqzfuOnVmf2RjRTHuyMZYNipSSb2TQ=",
+            local_port=40150,
+            local_link_ipv6="fe80::1919",
+            ipv6="fe80::150",
+            ipv4=None,
+        ),
+        Peer(
             name="routedbits",
             asn=4242420207,
             endpoint="router.ewr1.routedbits.com:51919",
