@@ -8,8 +8,8 @@ class Peer:
         local_port: int,
         local_link_ipv6: str,
         ipv6: str,
+        ipv4: str | None,
         multiprotocol: bool = True,
-        ipv4: str | None = None,
     ):
         self.name = name
         self.asn = asn
