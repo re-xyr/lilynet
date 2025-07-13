@@ -1,0 +1,11 @@
+{% for node in network %}
+interface wg{{ node.name }} type tunnel
+{% endfor %}
+
+redistribute ip 172.21.89.64/27 local metric 32
+redistribute ip 172.21.89.64/27 metric 128
+redistribute ip fd11:4514:1919::/48 local metric 32
+redistribute ip fd11:4514:1919::/48 metric 128
+redistribute local deny
+install ip 172.21.89.64/27 pref-src {{ local.ipv4 }}
+install ip fd11:4514:1919::/48 pref-src {{ local.ipv6 }}

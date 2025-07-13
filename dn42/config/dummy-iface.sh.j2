@@ -1,0 +1,8 @@
+if ip link show dummy42; then
+    ip link delete dummy42
+fi
+
+ip link add dummy42 type dummy
+ip addr add {{ local.ipv4 }}/32 dev dummy42
+ip addr add {{ local.ipv6 }}/64 dev dummy42
+ip link set dummy42 up

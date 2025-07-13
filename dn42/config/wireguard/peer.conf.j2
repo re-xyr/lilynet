@@ -1,0 +1,17 @@
+[Interface]
+PrivateKey = {{ local_secrets.private_key }}
+ListenPort = {{ peer.local_port }}
+
+Address = {{ peer.local_link_ipv6 }}/64
+Table = off
+
+{% if not peer.ipv4 is none %}
+PostUp = ip addr add {{ local.ipv4 }} peer {{ peer.ipv4 }} dev %i
+{% else %}
+PostUp = ip addr add {{ local.ipv4 }}/32 dev %i
+{% endif %}
+
+[Peer]
+PublicKey = {{ peer.pubkey }}
+Endpoint = {{ peer.endpoint }}
+AllowedIPs = fe80::/64, fd00::/8, 172.20.0.0/14, 10.0.0.0/8, 172.31.0.0/16

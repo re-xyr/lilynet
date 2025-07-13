@@ -1,0 +1,201 @@
+################################################
+#               Variable header                #
+################################################
+
+define OWNAS = 4242421919;
+define OWNIP = {{ local.ipv4 }};
+define OWNIPv6 = {{ local.ipv6 }};
+define OWNNET = 172.21.89.64/27;
+define OWNNETv6 = fd11:4514:1919::/48;
+define OWNNETSET = [172.21.89.64/27+];
+define OWNNETSETv6 = [fd11:4514:1919::/48+];
+
+################################################
+#                 Header end                   #
+################################################
+
+# Utility functions
+
+function is_self_net() {
+  return net ~ OWNNETSET;
+}
+
+function is_self_net_v6() {
+  return net ~ OWNNETSETv6;
+}
+
+function is_valid_network() {
+  return net ~ [
+    172.20.0.0/14{21,29}, # dn42
+    172.20.0.0/24{28,32}, # dn42 Anycast
+    172.21.0.0/24{28,32}, # dn42 Anycast
+    172.22.0.0/24{28,32}, # dn42 Anycast
+    172.23.0.0/24{28,32}, # dn42 Anycast
+    172.31.0.0/16+,       # ChaosVPN
+    10.100.0.0/14+,       # ChaosVPN
+    10.127.0.0/16+,       # neonetwork
+    10.0.0.0/8{15,24}     # Freifunk.net
+  ];
+}
+
+function is_valid_network_v6() {
+  return net ~ [
+    fd00::/8{44,64} # ULA address space as per RFC 4193
+  ];
+}
+
+# Invariant: The master routing table must ONLY contain DN42 addresses that are ROA verified at all times.
+
+router id OWNIP;
+ipv4 table dn42v4;
+ipv6 table dn42v6;
+
+protocol device {
+  scan time 10;
+}
+
+protocol kernel dn42_export_v4 {
+  scan time 20;
+
+  ipv4 {
+    table dn42v4;
+    import none;
+    export filter {
+      if source = RTS_STATIC then reject;
+      krt_prefsrc = OWNIP;
+      accept;
+    };
+  };
+}
+
+protocol kernel dn42_export_v6 {
+  scan time 20;
+
+  ipv6 {
+    table dn42v6;
+    import none;
+    export filter {
+      if source = RTS_STATIC then reject;
+      krt_prefsrc = OWNIPv6;
+      accept;
+    };
+  };
+}
+
+protocol static dn42_import_v4 {
+  route OWNNET unreachable;
+  ipv4 {
+    table dn42v4;
+    import all;
+    export none;
+  };
+}
+
+protocol static dn42_import_v6 {
+  route OWNNETv6 unreachable;
+  ipv6 {
+    table dn42v6;
+    import all;
+    export none;
+  };
+}
+
+roa4 table dn42_roa;
+roa6 table dn42_roa_v6;
+
+protocol static dn42_rpki_v4 {
+  roa4 { table dn42_roa; };
+  include "/etc/bird/roa_dn42.conf";
+}
+
+protocol static dn42_rpki_v6 {
+  roa6 { table dn42_roa_v6; };
+  include "/etc/bird/roa_dn42_v6.conf";
+}
+
+template bgp dnpeers {
+  local as OWNAS;
+  path metric 1;
+
+  ipv4 {
+    table dn42v4;
+    extended next hop;
+
+    import filter {
+      if !is_valid_network() || is_self_net() then reject;
+      if (roa_check(dn42_roa, net, bgp_path.last) != ROA_VALID) then {
+        # Reject when unknown or invalid according to ROA
+        print "[dn42] ROA check failed for ", net, " ASN ", bgp_path.last;
+        reject;
+      }
+      accept;
+    };
+
+    export filter {
+      if !is_valid_network() then reject;
+      else accept;
+    };
+
+    import limit 9000 action block;
+  };
+
+  ipv6 {
+    table dn42v6;
+
+    import filter {
+      if !is_valid_network_v6() || is_self_net_v6() then reject;
+      if (roa_check(dn42_roa_v6, net, bgp_path.last) != ROA_VALID) then {
+        # Reject when unknown or invalid according to ROA
+        print "[dn42] ROA check failed for ", net, " ASN ", bgp_path.last;
+        reject;
+      }
+      accept;
+    };
+
+    export filter {
+      if !is_valid_network_v6() then reject;
+      accept;
+    };
+
+    import limit 9000 action block;
+  };
+}
+
+template bgp dninternal {
+  local as OWNAS;
+  path metric 1;
+
+  ipv4 {
+    table dn42v4;
+    extended next hop;
+    import all;
+    export all;
+  };
+
+  ipv6 {
+    table dn42v6;
+    import all;
+    export all;
+  };
+}
+
+{% for peer in local.peers %}
+protocol bgp dn42_{{ peer.asn }} from dnpeers {
+  neighbor {{ peer.ipv6 }} as {{ peer.asn }};
+  interface "wg{{ peer.asn }}";
+}
+
+{% if not peer.multiprotocol and not peer.ipv4 is none %}
+protocol bgp dn42_{{ peer.asn }}_ipv4 from dnpeers {
+  neighbor {{ peer.ipv4 }} as {{ peer.asn }};
+}
+{% endif %}
+{% endfor %}
+
+{% for node in network %}
+protocol bgp dn42_net_{{ node.name }} from dninternal {
+  neighbor {{ node.stable_link_ipv6 }} as OWNAS;
+  direct;
+  interface "wg{{ node.name }}";
+}
+{% endfor %}

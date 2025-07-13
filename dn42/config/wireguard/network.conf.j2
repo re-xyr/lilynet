@@ -1,0 +1,11 @@
+[Interface]
+PrivateKey = {{ local_secrets.private_key }}
+ListenPort = {{ node.stable_port }}
+
+Address = {{ local.stable_link_ipv6 }}/64
+Table = off
+
+[Peer]
+PublicKey = {{ node.public_key }}
+Endpoint = {{ node.hostname }}:{{ local.stable_port }}
+AllowedIPs = ::/0, 0.0.0.0/0
