@@ -12,31 +12,31 @@ apt.packages(packages=["wireguard-tools"])
 for peer in host.loop(view.local.peers):
     peer_result = files.template(
         src="lilynet/config/wireguard/peer.conf.j2",
-        dest=f"/etc/wireguard/wg{peer.asn}.conf",
+        dest=f"/etc/wireguard/wgd{peer.asn}.conf",
         # j2 variables
         local=view.local,
         local_secrets=view.local_secrets,
         peer=peer,
     )
     systemd.service(
-        service=f"wg-quick@wg{peer.asn}",
+        service=f"wg-quick@wgd{peer.asn}",
         enabled=True,
-        restarted=peer_result.changed,
+        reloaded=peer_result.changed,
     )
 
 for node in host.loop(view.network):
     node_result = files.template(
         src="lilynet/config/wireguard/network.conf.j2",
-        dest=f"/etc/wireguard/wg{node.name}.conf",
+        dest=f"/etc/wireguard/wgn{node.name}.conf",
         # j2 variables
         local=view.local,
         local_secrets=view.local_secrets,
         node=node,
     )
     systemd.service(
-        service=f"wg-quick@wg{node.name}",
+        service=f"wg-quick@wgn{node.name}",
         enabled=True,
-        restarted=node_result.changed,
+        reloaded=node_result.changed,
     )
 
 router_result = files.template(
@@ -49,5 +49,5 @@ router_result = files.template(
 systemd.service(
     service="wg-quick@wgrouter",
     enabled=True,
-    restarted=router_result.changed,
+    reloaded=router_result.changed,
 )

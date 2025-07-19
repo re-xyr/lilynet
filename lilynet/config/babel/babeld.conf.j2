@@ -1,5 +1,5 @@
 {% for node in network %}
-interface wg{{ node.name }} type tunnel
+interface wgn{{ node.name }} type tunnel
 {% endfor %}
 
 redistribute ip 172.21.89.64/27 local metric 32

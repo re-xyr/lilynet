@@ -192,7 +192,7 @@ template bgp dninternal {
 {% for peer in local.peers %}
 protocol bgp dn42_{{ peer.asn }} from dnpeers {
   neighbor {{ peer.ipv6 }} as {{ peer.asn }};
-  interface "wg{{ peer.asn }}";
+  interface "wgd{{ peer.asn }}";
 }
 
 {% if not peer.multiprotocol and not peer.ipv4 is none %}
@@ -206,7 +206,7 @@ protocol bgp dn42_{{ peer.asn }}_ipv4 from dnpeers {
 protocol bgp dn42_net_{{ node.name }} from dninternal {
   neighbor {{ node.stable_link_ipv6 }} as OWNAS;
   direct;
-  interface "wg{{ node.name }}";
+  interface "wgn{{ node.name }}";
 }
 {% endfor %}
 
