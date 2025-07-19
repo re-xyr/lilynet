@@ -2,6 +2,11 @@
 #               Variable header                #
 ################################################
 
+define CLEARNET_OWNAS = 401736;
+define CLEARNET_OWNIPv6 = {{ local.clearnet_ipv6 }};
+define CLEARNET_OWNNETv6 = 2620:d7:6000::/48;
+define CLEARNET_OWNNETSETv6 = [2620:d7:6000::/48+];
+
 define OWNAS = 4242421919;
 define OWNIP = {{ local.ipv4 }};
 define OWNIPv6 = {{ local.ipv6 }};
@@ -44,11 +49,16 @@ function is_valid_network_v6() {
   ];
 }
 
+function is_clearnet_self_net_v6() {
+  return net ~ CLEARNET_OWNNETSETv6;
+}
+
 # Invariant: The master routing table must ONLY contain DN42 addresses that are ROA verified at all times.
 
 router id OWNIP;
 ipv4 table dn42v4;
 ipv6 table dn42v6;
+ipv6 table clearnetv6;
 
 protocol device {
   scan time 10;
@@ -199,3 +209,28 @@ protocol bgp dn42_net_{{ node.name }} from dninternal {
   interface "wg{{ node.name }}";
 }
 {% endfor %}
+
+protocol static clearnet_import_v6 {
+  route CLEARNET_OWNNETv6 unreachable;
+  ipv6 {
+    table clearnetv6;
+    import all;
+    export none;
+  };
+}
+
+protocol bgp clearnet_upstream_vultr_v6 {
+  local as CLEARNET_OWNAS;
+  neighbor 2001:19f0:ffff::1 as 64515;
+  multihop 2;
+  password "{{ local_secrets.vultr_bgp_password }}";
+
+  ipv6 {
+    table clearnetv6;
+    import none;
+    export filter {
+      if !is_clearnet_self_net_v6() then reject;
+      accept;
+    };
+  };
+}

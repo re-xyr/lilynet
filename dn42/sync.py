@@ -142,6 +142,7 @@ bird_conf_result = files.template(
     # j2 variables
     local=local,
     network=network,
+    local_secrets=local_secrets,
 )
 if bird_conf_result.changed:
     server.shell(

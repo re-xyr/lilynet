@@ -52,6 +52,7 @@ class Node:
         public_key: str,
         ipv4: str,
         ipv6: str,
+        clearnet_ipv6: str,
         stable_port: int,
         stable_link_ipv6: str,
         peers: list[Peer] = [],
@@ -62,6 +63,7 @@ class Node:
         self.public_key = public_key
         self.ipv4 = ipv4
         self.ipv6 = ipv6
+        self.clearnet_ipv6 = clearnet_ipv6
         self.stable_port = stable_port
         self.stable_link_ipv6 = stable_link_ipv6
         self.peers = peers
@@ -72,8 +74,9 @@ class Node:
 
 
 class Secrets:
-    def __init__(self, private_key: str):
+    def __init__(self, private_key: str, vultr_bgp_password: str):
         self.private_key = private_key
+        self.vultr_bgp_password = vultr_bgp_password
 
     def __repr__(self) -> str:
         return "<Secrets>"

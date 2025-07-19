@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 if ip link show dummy42; then
     ip link delete dummy42
 fi
@@ -6,3 +8,11 @@ ip link add dummy42 type dummy
 ip addr add {{ local.ipv4 }}/32 dev dummy42
 ip addr add {{ local.ipv6 }}/64 dev dummy42
 ip link set dummy42 up
+
+if ip link show dummy0; then
+    ip link delete dummy0
+fi
+
+ip link add dummy0 type dummy
+ip addr add {{ local.clearnet_ipv6 }}/64 dev dummy0
+ip link set dummy0 up
