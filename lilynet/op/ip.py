@@ -6,6 +6,12 @@ view = get_view(host)
 
 apt.packages(packages=["nftables"])
 
+sshd_config_result = files.put(
+    src="lilynet/config/sshd/no-pwauth.conf",
+    dest="/etc/ssh/sshd_config.d/no-pwauth.conf",
+)
+systemd.service(service="ssh", enabled=True, reloaded=sshd_config_result.changed)
+
 nftables_result = files.put(
     src="lilynet/config/nftables.conf",
     dest="/etc/nftables.conf",
