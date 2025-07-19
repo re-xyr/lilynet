@@ -64,12 +64,16 @@ dummy_iface_result = files.template(
     # j2 variables
     local=local,
 )
-
-if dummy_iface_result.changed:
-    server.shell(
-        name="Set up dummy interface",
-        commands=["/usr/local/bin/dummy-iface.sh"],
-    )
+dummy_iface_service_result = files.put(
+    src="dn42/config/systemd/dummy-iface.service",
+    dest="/etc/systemd/system/dummy-iface.service",
+)
+systemd.service(
+    service="dummy-iface.service",
+    enabled=True,
+    reloaded=dummy_iface_service_result.changed,
+    restarted=dummy_iface_result.changed or dummy_iface_service_result.changed,
+)
 
 # Set up WireGuard
 
