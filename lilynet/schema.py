@@ -74,9 +74,20 @@ class Node:
 
 
 class Secrets:
-    def __init__(self, private_key: str, vultr_bgp_password: str):
+    def __init__(
+        self,
+        private_key: str,
+    ):
         self.private_key = private_key
-        self.vultr_bgp_password = vultr_bgp_password
 
     def __repr__(self) -> str:
         return "<Secrets>"
+
+
+class GlobalSecrets:
+    def __init__(self, cloudflare_api_token: str, vultr_bgp_password: str):
+        self.cloudflare_api_token = cloudflare_api_token
+        self.vultr_bgp_password = vultr_bgp_password
+
+    def __repr__(self) -> str:
+        return "<GlobalSecrets>"

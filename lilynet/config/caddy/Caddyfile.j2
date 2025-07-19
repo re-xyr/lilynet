@@ -1,0 +1,12 @@
+localhost,
+{{ local.name }}.daylily.network {
+	respond "Hello, world!" 200
+}
+
+daylily.network {
+	tls {
+		dns cloudflare {{ global_secrets.cloudflare_api_token }}
+		dns_challenge_override_domain _acme-challenge.net.dayli.ly
+	}
+	respond "Hello, world!" 200
+}

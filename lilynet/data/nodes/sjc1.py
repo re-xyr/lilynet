@@ -1,5 +1,5 @@
-from dn42.data.schema import Node, Peer
-from dn42.data.downstreams import workstation
+from lilynet.schema import Node, Peer
+from lilynet.data.downstreams import workstation
 
 sjc1: Node = Node(
     name="sjc1",

@@ -1,6 +1,6 @@
 $TTL 900
 
-@	IN	SOA	ns1.daylily.network. noc.dayli.ly. ( 2025071802 3600 900 604800 900 )
+@	IN	SOA	ns1.daylily.network. noc.dayli.ly. ( 2025071804 3600 900 604800 900 )
 
 @	IN	NS	ns1.daylily.network.
 @	IN	NS	ns2.daylily.network.
@@ -14,3 +14,6 @@ ns2	IN	AAAA	2620:d7:6000::1
 ; Geos
 ewr1    IN  AAAA    2620:d7:6000:1::1
 sjc1    IN  AAAA    2620:d7:6000:2::1
+
+; Redirect DNS-1 ACME challenge to Cloudflare
+_acme-challenge IN  CNAME   _acme-challenge.net.dayli.ly.
