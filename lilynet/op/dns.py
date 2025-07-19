@@ -17,4 +17,4 @@ named_result = files.sync(
     dest="/etc/bind",
 )
 
-systemd.service(service="named", enabled=True, restarted=named_result.changed)
+systemd.service(service="named", enabled=True, reloaded=named_result.changed)

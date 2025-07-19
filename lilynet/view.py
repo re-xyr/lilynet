@@ -1,5 +1,5 @@
 from pyinfra.api.host import Host
-from lilynet.schema import GlobalSecrets, Node, Secrets
+from lilynet.schema import Node, Secrets
 from lilynet.data.directory import nodes as directory
 from lilynet.data.secrets import nodes as secrets, global_secrets
 

@@ -48,6 +48,5 @@ if caddy_result.changed:
 systemd.service(
     service="caddy",
     enabled=True,
-    reloaded=caddy_service_result.changed,
-    restarted=caddy_service_result.changed or caddy_result.changed,
+    reloaded=caddy_service_result.changed or caddy_result.changed,
 )
