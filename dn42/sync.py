@@ -5,7 +5,7 @@ from dn42.data.secrets import nodes as secrets
 
 # Install required packages
 
-apt.packages(packages=["babeld", "bird2", "dnsmasq", "nftables", "wireguard-tools"])
+apt.packages(packages=["babeld", "bind9", "bird2", "nftables", "wireguard-tools"])
 
 # Timed dn42 ROA import
 
@@ -26,13 +26,19 @@ systemd.service(
     restarted=should_reload,
 )
 
-# Set up dnsmasq
+# Set up named
 
-dnsmasq_result = files.put(
-    src="dn42/config/dnsmasq.conf",
-    dest="/etc/dnsmasq.conf",
+files.directory(
+    path="/var/named",
+    user="bind",
+    group="bind",
+    mode="0755",
 )
-systemd.service(service="dnsmasq", enabled=True, restarted=dnsmasq_result.changed)
+named_result = files.sync(
+    src="dn42/config/bind",
+    dest="/etc/bind",
+)
+systemd.service(service="named", enabled=True, restarted=named_result.changed)
 
 # Set up nftables
 
@@ -139,7 +145,7 @@ systemd.service(
 
 # Set up BIRD
 
-systemd.service(service="bird", running=True, enabled=True)
+systemd.service(service="bird", enabled=True)
 bird_conf_result = files.template(
     src="dn42/config/bird/bird.conf.j2",
     dest="/etc/bird/bird.conf",

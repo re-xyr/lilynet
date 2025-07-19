@@ -9,6 +9,15 @@ ip addr add {{ local.ipv4 }}/32 dev dummy42
 ip addr add {{ local.ipv6 }}/64 dev dummy42
 ip link set dummy42 up
 
+if ip link show anycast42; then
+    ip link delete anycast42
+fi
+
+ip link add anycast42 type dummy
+ip addr add 172.21.89.94/32 dev anycast42
+ip addr add fd11:4514:1919::1/64 dev anycast42
+ip link set anycast42 up
+
 if ip link show dummy0; then
     ip link delete dummy0
 fi
@@ -16,3 +25,11 @@ fi
 ip link add dummy0 type dummy
 ip addr add {{ local.clearnet_ipv6 }}/64 dev dummy0
 ip link set dummy0 up
+
+if ip link show anycast0; then
+    ip link delete anycast0
+fi
+
+ip link add anycast0 type dummy
+ip addr add 2620:d7:6000::1/64 dev anycast0
+ip link set anycast0 up

@@ -1,0 +1,10 @@
+$TTL 900
+
+@	IN	SOA	ns1.daylily.network. noc.dayli.ly. ( 2025071802 3600 900 604800 900 )
+
+@	IN	NS	ns1.daylily.network.
+@	IN	NS	ns2.daylily.network.
+
+1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0	IN	PTR	daylily.network.
+1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0.0 IN  PTR ewr1.daylily.network.
+1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.0.0 IN  PTR sjc1.daylily.network.
