@@ -1,0 +1,14 @@
+[Unit]
+Description=Lilynet Public Frontend
+After=network.target
+
+[Service]
+Type=exec
+WorkingDirectory=/srv/frontend
+Environment=HOST=127.0.0.1
+ExecStart=/usr/bin/node build/index.js
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

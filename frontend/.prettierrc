@@ -1,0 +1,9 @@
+{
+  "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+  "experimentalTernaries": true,
+  "experimentalOperatorPosition": "end",
+  "printWidth": 100,
+  "semi": false,
+  "singleQuote": true,
+  "svelteIndentScriptAndStyle": false
+}

@@ -15,7 +15,7 @@ repo_updated = apt.repo(
 )
 if repo_updated.changed:
     apt.update()
-apt.packages(packages=["golang-go", "xcaddy"])
+apt.packages(packages=["golang-go", "nodejs", "xcaddy"])
 
 # Install Caddy
 
@@ -26,9 +26,35 @@ if host.get_fact(File, "/usr/local/bin/caddy") is None:
             "xcaddy build --with github.com/caddy-dns/cloudflare --output /usr/local/bin/caddy"
         ],
     )
+
+# Copy over and build server files
+
+files.directory(path="/srv/frontend")
+files.rsync(
+    src="frontend/",
+    dest="/srv/frontend",
+)
+
+# Set up services
+
 caddy_service_result = files.put(
     src="lilynet/config/systemd/caddy.service",
     dest="/etc/systemd/system/caddy.service",
+)
+
+frontend_service_result = files.put(
+    src="lilynet/config/systemd/lilynet-frontend.service",
+    dest="/etc/systemd/system/lilynet-frontend.service",
+)
+
+if caddy_service_result.changed or frontend_service_result.changed:
+    systemd.daemon_reload()
+
+# Turn up frontend
+
+systemd.service(
+    service="lilynet-frontend",
+    restarted=frontend_service_result.changed,
 )
 
 # Set up Caddy

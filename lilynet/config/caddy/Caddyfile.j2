@@ -1,12 +1,25 @@
-localhost,
-{{ local.name }}.daylily.network {
-	respond "Hello, world!" 200
+{
+	email noc@dayli.ly
 }
 
-daylily.network {
+(serve) {
+	reverse_proxy :3000 {
+		header_up X-Lilynet-Node {{ local.name }}
+	}
+}
+
+localhost,
+{{ local.name }}.daylily.network,
+{{ local.name }}.net.dayli.ly {
+	import serve
+}
+
+daylily.network,
+net.dayli.ly {
 	tls {
 		dns cloudflare {{ global_secrets.cloudflare_api_token }}
 		dns_challenge_override_domain _acme-challenge.net.dayli.ly
 	}
-	respond "Hello, world!" 200
+	request_header X-Lilynet-Anycast Yes
+	import serve
 }
