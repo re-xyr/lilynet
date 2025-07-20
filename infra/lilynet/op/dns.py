@@ -1,7 +1,4 @@
-from pyinfra import local
 from pyinfra.operations import apt, files, systemd
-
-local.include("lilynet/op/ip.py")
 
 apt.packages(packages=["bind9"])
 

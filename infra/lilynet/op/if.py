@@ -1,22 +1,8 @@
-from pyinfra.operations import apt, files, systemd
+from pyinfra.operations import files, systemd
 from pyinfra.context import host
 from lilynet.view import get_view
 
 view = get_view(host)
-
-apt.packages(packages=["nftables"])
-
-sshd_config_result = files.put(
-    src="lilynet/config/sshd/no-pwauth.conf",
-    dest="/etc/ssh/sshd_config.d/no-pwauth.conf",
-)
-systemd.service(service="ssh", enabled=True, reloaded=sshd_config_result.changed)
-
-nftables_result = files.put(
-    src="lilynet/config/nftables.conf",
-    dest="/etc/nftables.conf",
-)
-systemd.service(service="nftables", enabled=True, restarted=nftables_result.changed)
 
 # Set up dummy iface
 dummy_iface_result = files.template(

@@ -6,7 +6,7 @@ After=network.target
 Type=exec
 WorkingDirectory=/srv/frontend
 Environment=HOST=127.0.0.1
-ExecStart=/usr/bin/node build/index.js
+ExecStart=/snap/bin/node build/index.js
 Restart=always
 RestartSec=10
 

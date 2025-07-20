@@ -1,9 +1,6 @@
-from pyinfra import local
 from pyinfra.operations import apt, files, systemd
 from pyinfra.context import host
 from lilynet.view import get_view
-
-local.include("lilynet/op/ip.py")
 
 view = get_view(host)
 

@@ -1,9 +1,6 @@
-from pyinfra import local
 from pyinfra.operations import apt, files, systemd, server
 from pyinfra.context import host
 from lilynet.view import get_view
-
-local.include("lilynet/op/wg.py")
 
 view = get_view(host)
 
