@@ -1,0 +1,33 @@
+<script lang="ts">
+const { data } = $props()
+</script>
+
+**Lilynet** is [daylily](https://dayli.ly)'s personal experimental network.
+
+Lilynet is [AS401736](https://bgp.tools/as/401736) on the clearnet (registered with ARIN) and [AS4242421919](https://explorer.dn42.dev/#/AS4242421919) on dn42. AS401736 is controlled by Project Daylily, the sole proprietorship of daylily.
+
+Currently, we originate the following prefixes:
+
+- `2620:d7:6000::/48` on the clearnet.
+- `fd11:4514:1919::/48` on dn42.
+- `172.21.89.64/27` on dn42.
+
+Our clearnet upstream is The Constant Company / Vultr (AS20473).
+
+We currently provide the following services on Lilynet:
+
+- Authoritative DNS of `daylily.network`.
+- Authoritative rDNS of our clearnet prefixes.
+- IPv6 and dn42 tunneling for our affiliates.
+- Routing to our servers under our owned prefixes.
+- dn42 peering; refer to the [dn42 peering policy](/dn42) for more information.
+
+---
+
+*You are currently accessing this page from IP <code>{data.meta.clientIp}</code> via <code>{data.meta.host}</code>.*
+{#if data.meta.anycast}
+  *This is an anycast hostname*
+{:else}
+  *This is a unicast hostname*
+{/if}
+*and is served by Lilynet edge node <code>{data.meta.node}</code>.*

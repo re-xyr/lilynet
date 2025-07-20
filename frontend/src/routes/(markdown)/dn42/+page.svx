@@ -1,0 +1,66 @@
+Since April 2025, I've been running a [dn42](https://wiki.dn42.us) network in order to learn computer networking concepts like [IP](https://en.wikipedia.org/wiki/Internet_Protocol), [BGP](https://en.wikipedia.org/wiki/Border_Gateway_Protocol), and [DNS](https://en.wikipedia.org/wiki/Domain_Name_System).
+
+## Overview
+
+- AS number: `AS4242421919` ("lilynet")
+- IPv4 range: `172.21.89.64/27`
+- IPv6 range: `fd11:4514:1919::/48`
+
+You can view this AS on [the dn42 registry explorer](https://explorer.dn42.dev/?#/aut-num/AS4242421919).
+
+All nodes are hosted on [Vultr](https://www.vultr.com/). I use [BIRD 2](https://bird.network.cz) as the BGP daemon, WireGuard for tunneling and internal meshing, and [babeld](https://www.irif.fr/~jch/software/babel/) for internal route propagation. Through [dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html), each node is also a simple DNS resolver that forwards requests to the [dn42 DNS anycast service](https://wiki.dn42.us/services/DNS).
+
+## Peering
+
+**Note that all peering information will be stored in [a publicly accessible GitHub repository](https://github.com/re-xyr/lilynet).**
+
+To peer, you can contact me via any method listed on [my homepage](https://dayli.ly). Peering policy (in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) parlance):
+
+- Each node *must* only have one peering per AS.
+- Tunneling *must* be done through [WireGuard](https://wiki.dn42.us/howto/wireguard).
+- [Multiprotocol BGP (RFC 4760)](https://www.rfc-editor.org/info/rfc4760) is *recommended*.
+  - In the case of MP-BGP, the BGP session *must* be established over IPv6.
+- [IPv4 extended next hop (RFC 8950)](https://www.rfc-editor.org/info/rfc8950) is *recommended*.
+- [Link-local addresses](https://en.wikipedia.org/wiki/Link-local_address) *should* be used for IPv6 peering.
+- All incoming routes are checked with [RPKI](https://en.wikipedia.org/wiki/Resource_Public_Key_Infrastructure).
+
+Please include all the following information in your initial request, so I can set up the peering without extra back and forth.
+
+- Your AS number
+- The lilynet node you want to peer with
+- Your node's WireGuard endpoint (IP/hostname + port)
+- Your node's WireGuard public key
+- Whether you want to use MP-BGP and IPv4 extended next hop
+- Your node's IPv6 address over the tunnel (link-local recommended)
+- Your node's IPv4 address over the tunnel
+
+Specifically regarding your IPv4 address:
+
+- In the case of MP-BGP, I will not establish a BGP session on your IPv4 address -- it is only used for routing.
+- In the case of MP-BGP + extended next hop, you may omit IPv4 entirely as it is not used in either BGP or routing.
+
+All the information you will need to peer with me is listed below. All WireGuard ports are `:4[xxxx]` where `[xxxx]` is the last 4 digits of your AS number.
+
+## Nodes
+
+Currently there are two nodes in this network.
+
+### US East / New Jersey (`ewr1`)
+
+| Key                  | Value                                          |
+| -------------------- | ---------------------------------------------- |
+| WireGuard Endpoint   | `ewr1.dn42.dayli.ly:4[xxxx]`                   |
+| WireGuard Public Key | `F6YGAEiF7VLd2r2DW/jX7vC8235b4DJf6HD29gRi6gg=` |
+| dn42 IPv4            | `172.21.89.65`                                 |
+| dn42 IPv6            | `fd11:4514:1919:1::1`                          |
+| Link-local IPv6      | `fe80::1919`                                   |
+
+### US West / Silicon Valley (`sjc1`)
+
+| Key                  | Value                                          |
+| -------------------- | ---------------------------------------------- |
+| WireGuard Endpoint   | `sjc1.dn42.dayli.ly:4[xxxx]`                   |
+| WireGuard Public Key | `yOt9PIXDa4pzAE+XMzDv7J+CYO2qf53fnF9MvLy4iQ8=` |
+| dn42 IPv4            | `172.21.89.66`                                 |
+| dn42 IPv6            | `fd11:4514:1919:2::1`                          |
+| Link-local IPv6      | `fe80::1919`                                   |
