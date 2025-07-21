@@ -1,0 +1,10 @@
+Nickname			lilynet{{ local.name }}
+ContactInfo			noc@dayli.ly
+ORPort				9001
+ExitRelay			0
+SocksPort			0
+Address 			{{ local.clearnet_ipv4 }}
+Address				[{{ local.clearnet_ipv6 }}]
+OutboundBindAddress	{{ local.clearnet_ipv4 }}
+OutboundBindAddress	[{{ local.clearnet_ipv6 }}]
+Log					notice file /var/log/tor/tor.log

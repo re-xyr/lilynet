@@ -1,4 +1,4 @@
-from pyinfra.operations import files, systemd
+from pyinfra.operations import files, openrc
 from pyinfra.context import host
 from lilynet.view import get_view
 
@@ -6,19 +6,15 @@ view = get_view(host)
 
 # Set up dummy iface
 dummy_iface_result = files.template(
-    src="lilynet/config/dummy-iface.sh.j2",
-    dest="/usr/local/bin/dummy-iface.sh",
+    src="lilynet/config/local.d/dummy-iface.start.j2",
+    dest="/etc/local.d/dummy-iface.start",
     mode="0755",
     # j2 variables
     local=view.local,
 )
-dummy_iface_service_result = files.put(
-    src="lilynet/config/systemd/dummy-iface.service",
-    dest="/etc/systemd/system/dummy-iface.service",
-)
-systemd.service(
-    service="dummy-iface.service",
+
+openrc.service(
+    service="local",
     enabled=True,
-    reloaded=dummy_iface_service_result.changed,
-    restarted=dummy_iface_result.changed or dummy_iface_service_result.changed,
+    restarted=dummy_iface_result.changed,
 )

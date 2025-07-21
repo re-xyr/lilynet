@@ -45,6 +45,9 @@ table inet filter {
 		# BGP
 		tcp dport 179 accept
 
+		# Tor Relay
+		tcp dport 9001 accept
+
 		# ICMP Echos
 		icmp type echo-request accept
 		icmpv6 type echo-request accept

@@ -1,7 +1,8 @@
 dn42 = (
     [
-        ("ewr1.dn42.dayli.ly", {}),
-        ("sjc1.dn42.dayli.ly", {}),
+        ("ewr1.node.dayli.ly", {}),
+        ("nrt1.node.dayli.ly", {}),
+        ("sjc1.node.dayli.ly", {}),
     ],
     {
         "ssh_user": "root",

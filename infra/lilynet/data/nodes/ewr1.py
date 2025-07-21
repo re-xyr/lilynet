@@ -3,10 +3,11 @@ from lilynet.data.downstreams import workstation
 
 ewr1: Node = Node(
     name="ewr1",
-    hostname="ewr1.dn42.dayli.ly",
+    hostname="ewr1.node.dayli.ly",
     public_key="F6YGAEiF7VLd2r2DW/jX7vC8235b4DJf6HD29gRi6gg=",
     ipv4="172.21.89.65",
     ipv6="fd11:4514:1919:1::1",
+    clearnet_ipv4="207.148.28.92",
     clearnet_ipv6="2620:d7:6000:1::1",
     stable_port=30001,
     stable_link_ipv6="fe80::1",

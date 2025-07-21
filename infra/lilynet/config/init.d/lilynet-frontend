@@ -1,0 +1,29 @@
+#!/sbin/openrc-run
+
+name="Lilynet Public Frontend"
+description="Lilynet Public Frontend"
+
+depend() {
+    need net
+}
+
+# Process info
+command="/usr/bin/node"
+command_args="/srv/frontend/build/index.js"
+command_background="yes"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+# Environment variables
+export HOST="127.0.0.1"
+
+respawn_delay=10
+respawn_max=0  # 0 = unlimited restarts
+
+output_log="/var/log/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}.log"
+
+start_pre() {
+    # Ensure log directory exists
+    checkpath --directory --owner root:root --mode 0755 \
+        "$(dirname "$output_log")"
+}

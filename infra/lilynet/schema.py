@@ -52,6 +52,7 @@ class Node:
         public_key: str,
         ipv4: str,
         ipv6: str,
+        clearnet_ipv4: str,
         clearnet_ipv6: str,
         stable_port: int,
         stable_link_ipv6: str,
@@ -63,6 +64,7 @@ class Node:
         self.public_key = public_key
         self.ipv4 = ipv4
         self.ipv6 = ipv6
+        self.clearnet_ipv4 = clearnet_ipv4
         self.clearnet_ipv6 = clearnet_ipv6
         self.stable_port = stable_port
         self.stable_link_ipv6 = stable_link_ipv6

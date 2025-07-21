@@ -1,11 +1,11 @@
-from pyinfra.operations import apt, files, systemd
+from pyinfra.operations import apk, files, openrc
 
-apt.packages(packages=["bind9"])
+apk.packages(packages=["bind"])
 
 files.directory(
     path="/var/named",
-    user="bind",
-    group="bind",
+    user="named",
+    group="named",
     mode="0755",
 )
 
@@ -14,4 +14,4 @@ named_result = files.sync(
     dest="/etc/bind",
 )
 
-systemd.service(service="named", enabled=True, reloaded=named_result.changed)
+openrc.service(service="named", enabled=True, reloaded=named_result.changed)

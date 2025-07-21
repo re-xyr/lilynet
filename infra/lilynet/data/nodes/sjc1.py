@@ -3,10 +3,11 @@ from lilynet.data.downstreams import workstation
 
 sjc1: Node = Node(
     name="sjc1",
-    hostname="sjc1.dn42.dayli.ly",
+    hostname="sjc1.node.dayli.ly",
     public_key="yOt9PIXDa4pzAE+XMzDv7J+CYO2qf53fnF9MvLy4iQ8=",
     ipv4="172.21.89.66",
     ipv6="fd11:4514:1919:2::1",
+    clearnet_ipv4="149.28.212.242",
     clearnet_ipv6="2620:d7:6000:2::1",
     stable_port=30002,
     stable_link_ipv6="fe80::2",

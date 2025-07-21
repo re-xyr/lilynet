@@ -1,9 +1,15 @@
-from pyinfra.operations import apt, files, systemd
+from pyinfra.operations import apk, files, openrc
 
-apt.packages(packages=["nftables"])
+apk.packages(packages=["nftables"])
 
 nftables_result = files.put(
-    src="lilynet/config/nftables.conf",
-    dest="/etc/nftables.conf",
+    src="lilynet/config/nftables.nft",
+    dest="/etc/nftables.nft",
 )
-systemd.service(service="nftables", enabled=True, restarted=nftables_result.changed)
+
+openrc.service(service="ufw", enabled=False, running=False)
+openrc.service(
+    service="nftables",
+    enabled=True,
+    restarted=nftables_result.changed,
+)

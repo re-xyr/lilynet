@@ -1,4 +1,4 @@
-from pyinfra.operations import files, systemd, server, snap
+from pyinfra.operations import files, openrc, apk
 from pyinfra.context import host
 from lilynet.view import get_view
 
@@ -6,7 +6,7 @@ view = get_view(host)
 
 # Install required packages
 
-snap.package(packages=["node"], channel="22/stable", classic=True)
+apk.packages(packages=["nodejs", "rsync"])
 
 # Copy over and build server files
 
@@ -19,16 +19,15 @@ files.rsync(
 # Set up services
 
 frontend_service_result = files.put(
-    src="lilynet/config/systemd/lilynet-frontend.service",
-    dest="/etc/systemd/system/lilynet-frontend.service",
+    src="lilynet/config/init.d/lilynet-frontend",
+    dest="/etc/init.d/lilynet-frontend",
+    mode="0755",
 )
-
-if frontend_service_result.changed:
-    systemd.daemon_reload()
 
 # Turn up frontend
 
-systemd.service(
+openrc.service(
     service="lilynet-frontend",
+    enabled=True,
     restarted=True,
 )

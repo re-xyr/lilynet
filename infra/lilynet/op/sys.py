@@ -1,0 +1,15 @@
+from pyinfra.operations import files, server
+
+# Disable password authentication for SSH
+
+files.put(
+    src="lilynet/config/cloud/cloud.cfg.d/99-no-pwauth.cfg",
+    dest="/etc/cloud/cloud.cfg.d/99-no-pwauth.cfg",
+)
+
+# Enable IP forwarding in sysctl
+
+server.sysctl(key="net.ipv4.conf.default.rp_filter", value="0", persist=True)
+server.sysctl(key="net.ipv4.conf.all.rp_filter", value="0", persist=True)
+server.sysctl(key="net.ipv4.ip_forward", value="1", persist=True)
+server.sysctl(key="net.ipv6.conf.all.forwarding", value="1", persist=True)
