@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "infra"
+		},
+		{
+			"path": "frontend"
+		}
+	],
+	"settings": {}
+}
