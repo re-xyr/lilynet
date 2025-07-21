@@ -30,4 +30,4 @@ We currently provide the following services on Lilynet:
 {:else}
   *This is a unicast hostname*
 {/if}
-*and is served by Lilynet edge node <code>{data.meta.node}</code>.*
+*and is served by lilynet edge node <code>{data.meta.node}</code>.*

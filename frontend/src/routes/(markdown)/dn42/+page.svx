@@ -1,6 +1,4 @@
-Since April 2025, I've been running a [dn42](https://wiki.dn42.us) network in order to learn computer networking concepts like [IP](https://en.wikipedia.org/wiki/Internet_Protocol), [BGP](https://en.wikipedia.org/wiki/Border_Gateway_Protocol), and [DNS](https://en.wikipedia.org/wiki/Domain_Name_System).
-
-## Overview
+Our presence on dn42 are:
 
 - AS number: `AS4242421919` ("lilynet")
 - IPv4 range: `172.21.89.64/27`
@@ -8,7 +6,7 @@ Since April 2025, I've been running a [dn42](https://wiki.dn42.us) network in or
 
 You can view this AS on [the dn42 registry explorer](https://explorer.dn42.dev/?#/aut-num/AS4242421919).
 
-All nodes are hosted on [Vultr](https://www.vultr.com/). I use [BIRD 2](https://bird.network.cz) as the BGP daemon, WireGuard for tunneling and internal meshing, and [babeld](https://www.irif.fr/~jch/software/babel/) for internal route propagation. Through [dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html), each node is also a simple DNS resolver that forwards requests to the [dn42 DNS anycast service](https://wiki.dn42.us/services/DNS).
+All nodes are hosted on [Vultr](https://www.vultr.com/). I use [BIRD 2](https://bird.network.cz) as the BGP daemon, WireGuard for tunneling and internal meshing, and [babeld](https://www.irif.fr/~jch/software/babel/) for internal route propagation.
 
 ## Peering
 

@@ -7,9 +7,29 @@ import '@fontsource-variable/ubuntu-sans-mono/wght-italic.css'
 
 import { page } from '$app/state'
 import type { LayoutProps } from './$types'
+import { VERSION } from '@sveltejs/kit'
 
 let { children, data }: LayoutProps = $props()
+
+const displayTitle = $derived(
+  page.url.pathname === '/' ? 'Lilynet' : `Lilynet - ${page.url.pathname}`,
+)
+const description = "Lilynet (AS401736, AS4242421919) is daylily's personal experimental network."
 </script>
+
+<svelte:head>
+  <title>{displayTitle}</title>
+
+  <meta name="author" content="Project Daylily" />
+  <meta name="generator" content="SvelteKit {VERSION}" />
+  <meta name="description" content={description} />
+
+  <meta property="og:title" content={displayTitle} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={page.url.toString()} />
+  <meta property="og:description" content={description} />
+  <meta property="og:site_name" content="dayli.ly" />
+</svelte:head>
 
 <div class="flex min-h-dvh flex-col items-center px-4 py-12">
   <div class="flex w-full max-w-xl grow flex-col gap-12">
