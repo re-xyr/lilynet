@@ -23,6 +23,16 @@ sjc1: Node = Node(
             ipv4="172.20.19.90",
         ),
         Peer(
+            name="prefixlabs",
+            asn=4242421240,
+            endpoint="us-03.prefixlabs.net:21919",
+            pubkey="oNabDMpFKum4CRbvPcwVE0Y4QsAfH0Sh439dfQYhnkQ=",
+            local_port=41240,
+            local_link_ipv6="fe80::1919",
+            ipv6="fe80::1240:4",
+            ipv4="172.20.209.13",
+        ),
+        Peer(
             name="tech9",
             asn=4242421588,
             endpoint="us-phx03.dn42.tech9.io:59745",

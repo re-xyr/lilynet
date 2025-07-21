@@ -33,6 +33,16 @@ ewr1: Node = Node(
             ipv4="172.20.19.69",
         ),
         Peer(
+            name="prefixlabs",
+            asn=4242421240,
+            endpoint="us-01.prefixlabs.net:21919",
+            pubkey="uRYzFGi+/B6pD0FR2SW3G/OzC5LPJXePNIt0s+nJfW0=",
+            local_port=41240,
+            local_link_ipv6="fe80::1919",
+            ipv6="fe80::1240:2",
+            ipv4="172.20.209.11",
+        ),
+        Peer(
             name="tech9",
             asn=4242421588,
             endpoint="us-chi01.dn42.tech9.io:53146",
