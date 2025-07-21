@@ -1,4 +1,9 @@
 from pyinfra.operations import files, server
+from pyinfra.context import host
+
+# Set hostname
+
+server.hostname(hostname=host.name)
 
 # Disable password authentication for SSH
 
