@@ -17,10 +17,10 @@ openrc.service(
     service="crond",
     enabled=True,
 )
-if roa_timer_result.changed:
-    server.shell(
-        commands=["/etc/periodic/15min/dn42-roa.sh"],
-    )
+server.shell(
+    commands=["/etc/periodic/15min/dn42-roa.sh"],
+    _if=roa_timer_result.did_change,
+)
 
 # Set up BIRD
 
@@ -35,5 +35,5 @@ bird_conf_result = files.template(
 openrc.service(
     service="bird",
     enabled=True,
-    reloaded=bird_conf_result.changed,
+    restarted=bird_conf_result.changed,
 )
