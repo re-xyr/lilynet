@@ -6,9 +6,7 @@ Address = {{ local.ipv6 }}/64, {{ local.ipv4 }}/32, 192.168.42.1/32
 {% for downstream in local.downstreams %}
 [Peer]
 PublicKey = {{ downstream.pubkey }}
-{% if downstream.endpoint is none %}
-PersistentKeepalive = 25
-{% else %}
+{% if not downstream.endpoint is none %}
 Endpoint = {{ downstream.endpoint }}
 {% endif %}
 AllowedIPs = {{ downstream.ipv6 }}, {{ downstream.local_ipv4 }}
