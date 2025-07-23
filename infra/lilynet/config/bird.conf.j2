@@ -62,6 +62,7 @@ protocol device {
 
 protocol kernel export_v4 {
   scan time 20;
+  kernel table 64;
 
   ipv4 {
     import none;
@@ -75,6 +76,7 @@ protocol kernel export_v4 {
 
 protocol kernel export_v6 {
   scan time 20;
+  kernel table 64;
 
   ipv6 {
     import none;

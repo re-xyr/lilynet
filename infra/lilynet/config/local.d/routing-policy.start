@@ -1,0 +1,7 @@
+#!/bin/sh
+
+ip rule delete table babeld || true
+ip rule delete table bird || true
+
+ip rule add priority 8192 table babeld
+ip rule add priority 16384 table bird
