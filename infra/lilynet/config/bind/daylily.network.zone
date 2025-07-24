@@ -1,6 +1,6 @@
 $TTL 900
 
-@	IN	SOA	ns1.daylily.network. noc.dayli.ly. ( 2025072101 3600 900 604800 900 )
+@	IN	SOA	ns1.daylily.network. noc.dayli.ly. ( 2025072301 3600 900 604800 900 )
 
 @	IN	NS	ns1.daylily.network.
 @	IN	NS	ns2.daylily.network.
@@ -20,4 +20,12 @@ nrt1    IN  AAAA    2620:d7:6000:3::1
 _acme-challenge IN  CNAME   _acme-challenge.net.dayli.ly.
 
 ; Google domain name verification
-@   IN  TXT google-site-verification=F3AFmn2EeAjaL8J9gu13vmk8AHB0gv8kF7DpbWcH_8Q
+@   IN  TXT	"google-site-verification=F3AFmn2EeAjaL8J9gu13vmk8AHB0gv8kF7DpbWcH_8Q"
+
+; Discord domain name verification
+_discord	IN	TXT	"dh=f5631e8aa031203f4252900cca857f090418816f"
+
+; Email anti-spoofing
+@				IN	TXT	"v=spf1 -all"
+*._domainkey	IN	TXT	"v=DKIM1; p="
+_dmarc			IN	TXT	"v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s;"
