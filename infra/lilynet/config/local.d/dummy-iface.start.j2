@@ -5,8 +5,10 @@ if ip link show dummy42; then
 fi
 
 ip link add dummy42 type dummy
-ip addr add {{ local.ipv4 }}/32 dev dummy42
-ip addr add {{ local.ipv6 }}/64 dev dummy42
+{% if local.dn42.ipv4 %}
+ip addr add {{ local.dn42.ipv4 }}/32 dev dummy42
+{% endif %}
+ip addr add {{ local.dn42.ipv6 }}/64 dev dummy42
 ip link set dummy42 up
 
 if ip link show anycast42; then
@@ -23,7 +25,10 @@ if ip link show dummy0; then
 fi
 
 ip link add dummy0 type dummy
-ip addr add {{ local.clearnet_ipv6 }}/64 dev dummy0
+{% if local.clearnet.ipv4 %}
+ip addr add {{ local.clearnet.ipv4 }}/32 dev dummy0
+{% endif %}
+ip addr add {{ local.clearnet.ipv6 }}/64 dev dummy0
 ip link set dummy0 up
 
 if ip link show anycast0; then

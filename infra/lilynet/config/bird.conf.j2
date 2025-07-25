@@ -3,18 +3,17 @@
 ################################################
 
 define CLEARNET_OWNAS = 401736;
-define CLEARNET_OWNIP = {{ local.clearnet_ipv4 }};
-define CLEARNET_OWNIPv6 = {{ local.clearnet_ipv6 }};
+define CLEARNET_OWNIPv6 = {{ local.clearnet.ipv6 }};
 define CLEARNET_OWNNETv6 = 2620:d7:6000::/48;
 define CLEARNET_OWNNETSETv6 = [2620:d7:6000::/48+];
 
-define OWNAS = 4242421919;
-define OWNIP = {{ local.ipv4 }};
-define OWNIPv6 = {{ local.ipv6 }};
-define OWNNET = 172.21.89.64/27;
-define OWNNETv6 = fd11:4514:1919::/48;
-define OWNNETSET = [172.21.89.64/27+];
-define OWNNETSETv6 = [fd11:4514:1919::/48+];
+define DN42_OWNAS = 4242421919;
+define DN42_OWNIP = {{ local.dn42.ipv4 }};
+define DN42_OWNIPv6 = {{ local.dn42.ipv6 }};
+define DN42_OWNNET = 172.21.89.64/27;
+define DN42_OWNNETv6 = fd11:4514:1919::/48;
+define DN42_OWNNETSET = [172.21.89.64/27+];
+define DN42_OWNNETSETv6 = [fd11:4514:1919::/48+];
 
 ################################################
 #                 Header end                   #
@@ -22,12 +21,12 @@ define OWNNETSETv6 = [fd11:4514:1919::/48+];
 
 # Utility functions
 
-function is_self_net() {
-  return net ~ OWNNETSET;
+function is_dn42_self_net() {
+  return net ~ DN42_OWNNETSET;
 }
 
-function is_self_net_v6() {
-  return net ~ OWNNETSETv6;
+function is_dn42_self_net_v6() {
+  return net ~ DN42_OWNNETSETv6;
 }
 
 function is_clearnet_self_net_v6() {
@@ -54,7 +53,7 @@ function is_dn42_network_v6() {
   ];
 }
 
-router id OWNIP;
+router id DN42_OWNIP;
 
 protocol device {
   scan time 10;
@@ -68,7 +67,7 @@ protocol kernel export_v4 {
     import none;
     export filter {
       if source = RTS_STATIC then reject;
-      if is_dn42_network() then krt_prefsrc = OWNIP;
+      if is_dn42_network() then krt_prefsrc = DN42_OWNIP;
       accept;
     };
   };
@@ -82,14 +81,14 @@ protocol kernel export_v6 {
     import none;
     export filter {
       if source = RTS_STATIC then reject;
-      if is_dn42_network_v6() then krt_prefsrc = OWNIPv6;
+      if is_dn42_network_v6() then krt_prefsrc = DN42_OWNIPv6;
       accept;
     };
   };
 }
 
 protocol static import_v4 {
-  route OWNNET unreachable;
+  route DN42_OWNNET unreachable;
   ipv4 {
     import all;
     export none;
@@ -97,7 +96,7 @@ protocol static import_v4 {
 }
 
 protocol static import_v6 {
-  route OWNNETv6 unreachable;
+  route DN42_OWNNETv6 unreachable;
   route CLEARNET_OWNNETv6 unreachable;
   ipv6 {
     import all;
@@ -118,38 +117,14 @@ protocol static dn42_rpki_v6 {
   include "/etc/bird/roa_dn42_v6.conf";
 }
 
-protocol bgp clearnet_upstream_vultr_v4 {
-  local as CLEARNET_OWNAS;
-  neighbor 169.254.169.254 as 64515;
-  multihop 2;
-  password "{{ global_secrets.vultr_bgp_password }}";
-
-  ipv4 {
-    import filter {
-      if bgp_community ~ [ (20473, 4000), (20473, 500) ] then {
-        ifname = "eth0";
-        accept;
-      }
-      reject;
-    };
-    export none;
-  };
-}
-
 protocol bgp clearnet_upstream_vultr_v6 {
   local as CLEARNET_OWNAS;
   neighbor 2001:19f0:ffff::1 as 64515;
-  multihop 2;
+  multihop;
   password "{{ global_secrets.vultr_bgp_password }}";
 
   ipv6 {
-    import filter {
-      if bgp_community ~ [ (20473, 4000), (20473, 500) ] then {
-        ifname = "eth0";
-        accept;
-      }
-      reject;
-    };
+    import none;
     export filter {
       if !is_clearnet_self_net_v6() then reject;
       accept;
@@ -158,14 +133,14 @@ protocol bgp clearnet_upstream_vultr_v6 {
 }
 
 template bgp dnpeers {
-  local as OWNAS;
+  local as DN42_OWNAS;
   path metric 1;
 
   ipv4 {
     extended next hop;
 
     import filter {
-      if !is_dn42_network() || is_self_net() then reject;
+      if !is_dn42_network() || is_dn42_self_net() then reject;
       if (roa_check(dn42_roa, net, bgp_path.last) != ROA_VALID) then {
         # Reject when unknown or invalid according to ROA
         print "[dn42] ROA check failed for ", net, " ASN ", bgp_path.last;
@@ -184,7 +159,7 @@ template bgp dnpeers {
 
   ipv6 {
     import filter {
-      if !is_dn42_network_v6() || is_self_net_v6() then reject;
+      if !is_dn42_network_v6() || is_dn42_self_net_v6() then reject;
       if (roa_check(dn42_roa_v6, net, bgp_path.last) != ROA_VALID) then {
         # Reject when unknown or invalid according to ROA
         print "[dn42] ROA check failed for ", net, " ASN ", bgp_path.last;
@@ -203,7 +178,7 @@ template bgp dnpeers {
 }
 
 template bgp internal {
-  local as OWNAS;
+  local as DN42_OWNAS;
   path metric 1;
 
   ipv4 {
@@ -218,22 +193,22 @@ template bgp internal {
   };
 }
 
-{% for peer in local.peers %}
+{% for peer in local.dn42_peers %}
 protocol bgp dn42_{{ peer.asn }} from dnpeers {
-  neighbor {{ peer.ipv6 }} as {{ peer.asn }};
+  neighbor {{ peer.wg.peer.ipv6 }} as {{ peer.asn }};
   interface "wgd{{ peer.asn }}";
 }
 
-{% if not peer.multiprotocol and not peer.ipv4 is none %}
+{% if peer.wg.peer.ipv4 and not peer.multiprotocol %}
 protocol bgp dn42_{{ peer.asn }}_ipv4 from dnpeers {
-  neighbor {{ peer.ipv4 }} as {{ peer.asn }};
+  neighbor {{ peer.wg.peer.ipv4 }} as {{ peer.asn }};
 }
 {% endif %}
 {% endfor %}
 
 {% for node in network %}
 protocol bgp net_{{ node.name }} from internal {
-  neighbor {{ node.stable_link_ipv6 }} as OWNAS;
+  neighbor {{ node.wg.peer_ll_ipv6 }} as DN42_OWNAS;
   direct;
   interface "wgn{{ node.name }}";
 }

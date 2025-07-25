@@ -1,95 +1,73 @@
-class Peer:
-    def __init__(
-        self,
-        name: str,
-        asn: int,
-        endpoint: str,
-        pubkey: str,
-        local_port: int,
-        local_link_ipv6: str,
-        ipv6: str,
-        ipv4: str | None,
-        multiprotocol: bool = True,
-    ):
-        self.name = name
-        self.asn = asn
-        self.endpoint = endpoint
-        self.pubkey = pubkey
-        self.local_port = local_port
-        self.local_link_ipv6 = local_link_ipv6
-        self.ipv4 = ipv4
-        self.ipv6 = ipv6
-        self.multiprotocol = multiprotocol
+from dataclasses import KW_ONLY, dataclass, field
+
+
+@dataclass
+class Host:
+    _: KW_ONLY
+    hostname: str | None = None
+    ipv4: str | None = None
+    ipv6: str | None = None
+
+
+@dataclass
+class Wg:
+    _: KW_ONLY
+    peer_port: int
+    peer_pubkey: str
+    peer: Host
+    local_port: int
+    local_ll_ipv6: str
+
+
+@dataclass
+class WgTemplate:
+    _: KW_ONLY
+    local_port: int
+    peer_pubkey: str
+    peer_ll_ipv6: str
+
+
+@dataclass
+class Dn42Peer:
+    _: KW_ONLY
+    name: str
+    asn: int
+    underlay: Host
+    wg: Wg
+    multiprotocol: bool = True
 
     def __repr__(self):
         return f"<Peer {self.name} (AS{self.asn})>"
 
 
-class Downstream:
-    def __init__(
-        self,
-        pubkey: str,
-        ipv6: str,
-        local_ipv4: str,
-        public_ipv4: str | None = None,
-        endpoint: str | None = None,
-    ):
-        self.pubkey = pubkey
-        self.ipv6 = ipv6
-        self.local_ipv4 = local_ipv4
-        self.public_ipv4 = public_ipv4
-        self.endpoint = endpoint
-
-    def __repr__(self):
-        return f"<Downstream {self.public_ipv4 if self.public_ipv4 is not None else self.local_ipv4}>"
-
-
+@dataclass
 class Node:
-    def __init__(
-        self,
-        name: str,
-        hostname: str,
-        public_key: str,
-        ipv4: str,
-        ipv6: str,
-        clearnet_ipv4: str,
-        clearnet_ipv6: str,
-        stable_port: int,
-        stable_link_ipv6: str,
-        peers: list[Peer] = [],
-        downstreams: list[Downstream] = [],
-    ):
-        self.name = name
-        self.hostname = hostname
-        self.public_key = public_key
-        self.ipv4 = ipv4
-        self.ipv6 = ipv6
-        self.clearnet_ipv4 = clearnet_ipv4
-        self.clearnet_ipv6 = clearnet_ipv6
-        self.stable_port = stable_port
-        self.stable_link_ipv6 = stable_link_ipv6
-        self.peers = peers
-        self.downstreams = downstreams
+    _: KW_ONLY
+    name: str
+    underlay: Host
+    wg: WgTemplate
+    clearnet: Host | None = None
+    dn42: Host | None = None
+    dn42_peers: list[Dn42Peer] = field(default_factory=list)
 
     def __repr__(self) -> str:
         return f"<Node {self.name}>"
 
 
-class Secrets:
-    def __init__(
-        self,
-        private_key: str,
-    ):
-        self.private_key = private_key
+@dataclass
+class NodeSecrets:
+    _: KW_ONLY
+    wg_privkey: str
 
     def __repr__(self) -> str:
-        return "<Secrets>"
+        return "<NodeSecrets>"
 
 
+@dataclass
 class GlobalSecrets:
-    def __init__(self, cloudflare_api_token: str, vultr_bgp_password: str):
-        self.cloudflare_api_token = cloudflare_api_token
-        self.vultr_bgp_password = vultr_bgp_password
+    _: KW_ONLY
+    cloudflare_api_token: str
+    vultr_bgp_password: str
 
     def __repr__(self) -> str:
         return "<GlobalSecrets>"

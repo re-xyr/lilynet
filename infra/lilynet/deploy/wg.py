@@ -6,7 +6,7 @@ view = get_view(host)
 
 apk.packages(packages=["wireguard-tools"])
 
-for peer in host.loop(view.local.peers):
+for peer in host.loop(view.local.dn42_peers):
     peer_result = files.template(
         src="lilynet/config/wireguard/peer.conf.j2",
         dest=f"/etc/wireguard/wgd{peer.asn}.conf",
@@ -43,20 +43,3 @@ for node in host.loop(view.network):
         enabled=True,
         reloaded=node_result.changed,
     )
-
-router_result = files.template(
-    src="lilynet/config/wireguard/router.conf.j2",
-    dest="/etc/wireguard/wgrouter.conf",
-    # j2 variables
-    local=view.local,
-    local_secrets=view.local_secrets,
-)
-files.link(
-    path="/etc/init.d/wg-quick.wgrouter",
-    target="/etc/init.d/wg-quick",
-)
-openrc.service(
-    service="wg-quick.wgrouter",
-    enabled=True,
-    reloaded=router_result.changed,
-)

@@ -1,11 +1,11 @@
 from pyinfra.api.host import Host
-from lilynet.schema import Node, Secrets
+from lilynet.schema import Node, NodeSecrets
 from lilynet.data.directory import nodes as directory
 from lilynet.data.secrets import nodes as secrets, global_secrets
 
 
 class View:
-    def __init__(self, local: Node, local_secrets: Secrets, network: list[Node]):
+    def __init__(self, local: Node, local_secrets: NodeSecrets, network: list[Node]):
         self.local = local
         self.local_secrets = local_secrets
         self.global_secrets = global_secrets

@@ -1,11 +1,11 @@
 [Interface]
-PrivateKey = {{ local_secrets.private_key }}
-ListenPort = {{ node.stable_port }}
+PrivateKey = {{ local_secrets.wg_privkey }}
+ListenPort = {{ node.wg.local_port }}
 
-Address = {{ local.stable_link_ipv6 }}/64
+Address = {{ local.wg.peer_ll_ipv6 }}/64
 Table = off
 
 [Peer]
-PublicKey = {{ node.public_key }}
-Endpoint = {{ node.hostname }}:{{ local.stable_port }}
+PublicKey = {{ node.wg.peer_pubkey }}
+Endpoint = {{ node.underlay.hostname }}:{{ local.wg.local_port }}
 AllowedIPs = ::/0, 0.0.0.0/0
