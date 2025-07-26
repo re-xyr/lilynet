@@ -6,9 +6,9 @@ Address = {{ peer.wg.local_ll_ipv6 }}/64
 Table = off
 
 {% if peer.wg.peer.ipv4 %}
-PostUp = ip addr add {{ local.dn42.ipv4 }} peer {{ peer.wg.peer.ipv4 }} dev %i
+PostUp = ip addr add {{ local.dn42.host.ipv4 }} peer {{ peer.wg.peer.ipv4 }} dev %i
 {% else %}
-PostUp = ip addr add {{ local.dn42.ipv4 }}/32 dev %i
+PostUp = ip addr add {{ local.dn42.host.ipv4 }}/32 dev %i
 {% endif %}
 
 [Peer]

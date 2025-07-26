@@ -41,13 +41,23 @@ class Dn42Peer:
 
 
 @dataclass
+class Router:
+    _: KW_ONLY
+    host: Host
+    ipv4s: list[str] = field(default_factory=list)
+    ipv6s: list[str] = field(default_factory=list)
+    ipv4_prefixes: list[str] = field(default_factory=list)
+    ipv6_prefixes: list[str] = field(default_factory=list)
+
+
+@dataclass
 class Node:
     _: KW_ONLY
     name: str
     underlay: Host
     wg: WgTemplate
-    clearnet: Host | None = None
-    dn42: Host | None = None
+    clearnet: Router | None = None
+    dn42: Router | None = None
     dn42_peers: list[Dn42Peer] = field(default_factory=list)
 
     def __repr__(self) -> str:

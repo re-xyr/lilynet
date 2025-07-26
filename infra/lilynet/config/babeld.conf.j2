@@ -4,13 +4,18 @@ export-table 128
 interface wgn{{ node.name }} type tunnel
 {% endfor %}
 
-redistribute ip 172.21.89.64/27 local metric 32
-redistribute ip 172.21.89.64/27 metric 128
-redistribute ip fd11:4514:1919::/48 local metric 32
-redistribute ip fd11:4514:1919::/48 metric 128
-redistribute ip 2620:d7:6000::/48 local metric 32
-redistribute ip 2620:d7:6000::/48 metric 128
+{% macro redistribute(cidr) %}
+redistribute ip {{ cidr }} local metric 32
+redistribute ip {{ cidr }} metric 128
+{% endmacro %}
+
+{{ redistribute("172.21.89.64/27") }}
+{{ redistribute("fd11:4514:1919::/48") }}
+{{ redistribute("23.142.212.0/24") }}
+{{ redistribute("2620:d7:6000::/44") }}
 redistribute local deny
-install ip 172.21.89.64/27 pref-src {{ local.ipv4 }}
-install ip fd11:4514:1919::/48 pref-src {{ local.ipv6 }}
-install ip 2620:d7:6000::/48 pref-src {{ local.clearnet_ipv6 }}
+
+install ip 172.21.89.64/27 pref-src {{ local.dn42.host.ipv4 }}
+install ip fd11:4514:1919::/48 pref-src {{ local.dn42.host.ipv6 }}
+install ip 23.142.212.0/24 pref-src {{ local.clearnet.host.ipv4 }}
+install ip 2620:d7:6000::/44 pref-src {{ local.clearnet.host.ipv6 }}

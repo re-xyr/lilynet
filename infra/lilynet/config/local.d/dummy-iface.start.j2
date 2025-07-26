@@ -1,40 +1,34 @@
 #!/bin/sh
 
-if ip link show dummy42; then
-    ip link delete dummy42
+{% macro dummy(iface, router) %}
+if ip link show {{ iface }}; then
+    ip link delete {{ iface }}
 fi
 
-ip link add dummy42 type dummy
-{% if local.dn42.ipv4 %}
-ip addr add {{ local.dn42.ipv4 }}/32 dev dummy42
+ip link add {{ iface }} type dummy
+
+{% if router.host.ipv6 %}
+{# primary ipv6 #}
+ip addr add {{ router.host.ipv6 }}/64 dev {{ iface }}
+
+{# secondary ipv6s #}
+{% for ip in router.ipv6s %}
+ip addr add {{ ip }}/64 dev {{ iface }}
+{% endfor %}
 {% endif %}
-ip addr add {{ local.dn42.ipv6 }}/64 dev dummy42
-ip link set dummy42 up
 
-if ip link show anycast42; then
-    ip link delete anycast42
-fi
+{% if router.host.ipv4 %}
+{# primary ipv4 #}
+ip addr add {{ router.host.ipv4 }}/32 dev {{ iface }}
 
-ip link add anycast42 type dummy
-ip addr add 172.21.89.94/32 dev anycast42
-ip addr add fd11:4514:1919::1/64 dev anycast42
-ip link set anycast42 up
-
-if ip link show dummy0; then
-    ip link delete dummy0
-fi
-
-ip link add dummy0 type dummy
-{% if local.clearnet.ipv4 %}
-ip addr add {{ local.clearnet.ipv4 }}/32 dev dummy0
+{# secondary ipv4s #}
+{% for ip in router.ipv4s %}
+ip addr add {{ ip }}/32 dev {{ iface }}
+{% endfor %}
 {% endif %}
-ip addr add {{ local.clearnet.ipv6 }}/64 dev dummy0
-ip link set dummy0 up
 
-if ip link show anycast0; then
-    ip link delete anycast0
-fi
+ip link set {{ iface }} up
+{% endmacro %}
 
-ip link add anycast0 type dummy
-ip addr add 2620:d7:6000::1/64 dev anycast0
-ip link set anycast0 up
+{{ dummy("dummy0", local.clearnet) }}
+{{ dummy("dummy42", local.dn42) }}

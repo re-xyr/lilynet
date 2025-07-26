@@ -3,13 +3,13 @@ ContactInfo			noc@dayli.ly
 ORPort				9001
 ExitRelay			0
 SocksPort			0
-{% if local.clearnet.ipv4 %}
-Address 			{{ local.clearnet.ipv4 }}
-OutboundBindAddress	{{ local.clearnet.ipv4 }}
+{% if local.clearnet.host.ipv4 %}
+Address 			{{ local.clearnet.host.ipv4 }}
+OutboundBindAddress	{{ local.clearnet.host.ipv4 }}
 {% else %}
 Address 			{{ local.underlay.ipv4 }}
 OutboundBindAddress	{{ local.underlay.ipv4 }}
 {% endif %}
-Address				[{{ local.clearnet.ipv6 }}]
-OutboundBindAddress	[{{ local.clearnet.ipv6 }}]
+Address				[{{ local.clearnet.host.ipv6 }}]
+OutboundBindAddress	[{{ local.clearnet.host.ipv6 }}]
 Log					notice file /var/log/tor/tor.log

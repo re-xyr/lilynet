@@ -1,4 +1,4 @@
-from lilynet.schema import Node, Dn42Peer, Wg, WgTemplate, Host
+from lilynet.schema import Node, Dn42Peer, Wg, WgTemplate, Host, Router
 
 sjc1: Node = Node(
     name="sjc1",
@@ -12,13 +12,27 @@ sjc1: Node = Node(
         peer_pubkey="yOt9PIXDa4pzAE+XMzDv7J+CYO2qf53fnF9MvLy4iQ8=",
         peer_ll_ipv6="fe80::2",
     ),
-    clearnet=Host(
-        hostname="sjc1.daylily.network",
-        ipv6="2620:d7:6000:2::1",
+    clearnet=Router(
+        host=Host(
+            hostname="sjc1.daylily.network",
+            ipv6="2620:d7:6002::1",
+            ipv4="23.142.212.253",
+        ),
+        ipv4s=["23.142.212.1"],
+        ipv6s=["2620:d7:6000::1"],
+        ipv4_prefixes=["23.142.212.0/24"],
+        ipv6_prefixes=[
+            "2620:d7:6000::/48",
+            "2620:d7:6002::/48",
+        ],
     ),
-    dn42=Host(
-        ipv4="172.21.89.66",
-        ipv6="fd11:4514:1919:2::1",
+    dn42=Router(
+        host=Host(
+            ipv4="172.21.89.66",
+            ipv6="fd11:4514:1919:2::1",
+        ),
+        ipv4_prefixes=["172.21.89.64/27"],
+        ipv6_prefixes=["fd11:4514:1919::/48"],
     ),
     dn42_peers=[
         Dn42Peer(

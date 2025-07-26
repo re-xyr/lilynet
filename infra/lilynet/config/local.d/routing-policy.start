@@ -1,13 +1,12 @@
 #!/bin/sh
 
-ip -4 rule delete table babeld || true
-ip -4 rule add priority 8192 table babeld
+{% macro table(table, priority) %}
+ip -4 rule delete table {{ table }} || true
+ip -4 rule add priority {{ priority }} table {{ table }}
 
-ip -6 rule delete table babeld || true
-ip -6 rule add priority 8192 table babeld
+ip -6 rule delete table {{ table }} || true
+ip -6 rule add priority {{ priority }} table {{ table }}
+{% endmacro %}
 
-ip -4 rule delete table bird || true
-ip -4 rule add priority 16384 table bird
-
-ip -6 rule delete table bird || true
-ip -6 rule add priority 16384 table bird
+{{ table("babeld", 8192) }}
+{{ table("bird", 16384) }}

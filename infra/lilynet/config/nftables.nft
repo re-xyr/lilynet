@@ -5,7 +5,8 @@ flush ruleset
 define dn42_ipv4 = { 172.20.0.0/14, 172.31.0.0/16, 10.100.0.0/14, 10.127.0.0/16, 10.0.0.0/8 }
 define dn42_ipv6 = { fd00::/8 }  # This is just the ULA range.
 
-define clearnet_own_ipv6 = 2620:d7:6000::/48
+define clearnet_own_ipv6 = 2620:d7:6000::/44
+define clearnet_own_ipv4 = 23.142.212.0/24
 
 table inet filter {
 	chain input {
@@ -66,6 +67,7 @@ table inet filter {
 
 		# Internal clearnet routing
 		ip6 daddr $clearnet_own_ipv6 accept
+		ip daddr $clearnet_own_ipv4 accept
 	}
 
 	chain output {

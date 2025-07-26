@@ -1,4 +1,4 @@
-from lilynet.schema import Node, Dn42Peer, Host, Wg, WgTemplate
+from lilynet.schema import Node, Dn42Peer, Host, Wg, WgTemplate, Router
 
 ewr1: Node = Node(
     name="ewr1",
@@ -12,13 +12,27 @@ ewr1: Node = Node(
         peer_pubkey="F6YGAEiF7VLd2r2DW/jX7vC8235b4DJf6HD29gRi6gg=",
         peer_ll_ipv6="fe80::1",
     ),
-    clearnet=Host(
-        hostname="ewr1.daylily.network",
-        ipv6="2620:d7:6000:1::1",
+    clearnet=Router(
+        host=Host(
+            hostname="ewr1.daylily.network",
+            ipv6="2620:d7:6001::1",
+            ipv4="23.142.212.254",
+        ),
+        ipv4s=["23.142.212.1"],
+        ipv6s=["2620:d7:6000::1"],
+        ipv4_prefixes=["23.142.212.0/24"],
+        ipv6_prefixes=[
+            "2620:d7:6000::/48",
+            "2620:d7:6001::/48",
+        ],
     ),
-    dn42=Host(
-        ipv4="172.21.89.65",
-        ipv6="fd11:4514:1919:1::1",
+    dn42=Router(
+        host=Host(
+            ipv4="172.21.89.65",
+            ipv6="fd11:4514:1919:1::1",
+        ),
+        ipv4_prefixes=["172.21.89.64/27"],
+        ipv6_prefixes=["fd11:4514:1919::/48"],
     ),
     dn42_peers=[
         Dn42Peer(
