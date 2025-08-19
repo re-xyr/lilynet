@@ -8,7 +8,8 @@ Lilynet is [AS401736](https://bgp.tools/as/401736) on the clearnet (registered w
 
 Currently, we originate the following prefixes:
 
-- `2620:d7:6000::/48` on the clearnet.
+- `2620:d7:6000::/44` on the clearnet.
+- `23.142.212.0/24` on the clearnet.
 - `fd11:4514:1919::/48` on dn42.
 - `172.21.89.64/27` on dn42.
 
