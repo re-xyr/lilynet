@@ -1,6 +1,6 @@
 $TTL 900
 
-@	IN	SOA	ns1.daylily.network. noc.dayli.ly. ( 2025072501 3600 900 604800 900 )
+@	IN	SOA	ns1.daylily.network. noc.dayli.ly. ( 2025081201 3600 900 604800 900 )
 
 @	IN	NS	ns1.daylily.network.
 @	IN	NS	ns2.daylily.network.
@@ -18,19 +18,19 @@ www	IN	CNAME	@
 
 ; Geos
 ewr1	IN	A		23.142.212.254
-ewr1    IN  AAAA    2620:d7:6001::1
+ewr1	IN	AAAA	2620:d7:6001::1
 
 sjc1	IN	A		23.142.212.253
-sjc1    IN  AAAA    2620:d7:6002::1
+sjc1	IN	AAAA	2620:d7:6002::1
 
 nrt1	IN	A		23.142.212.252
-nrt1    IN  AAAA    2620:d7:6003::1
+nrt1	IN	AAAA	2620:d7:6003::1
 
 ; Redirect DNS-1 ACME challenge to Cloudflare
-_acme-challenge IN  CNAME   _acme-challenge.net.dayli.ly.
+_acme-challenge	IN	CNAME	_acme-challenge.net.dayli.ly.
 
 ; Google domain name verification
-@   IN  TXT	"google-site-verification=F3AFmn2EeAjaL8J9gu13vmk8AHB0gv8kF7DpbWcH_8Q"
+@	IN	TXT	"google-site-verification=F3AFmn2EeAjaL8J9gu13vmk8AHB0gv8kF7DpbWcH_8Q"
 
 ; Discord domain name verification
 _discord	IN	TXT	"dh=f5631e8aa031203f4252900cca857f090418816f"

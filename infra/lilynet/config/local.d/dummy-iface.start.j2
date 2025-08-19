@@ -2,7 +2,7 @@
 
 {% macro dummy(iface, router) %}
 if ip link show {{ iface }}; then
-    ip link delete {{ iface }}
+  ip link delete {{ iface }}
 fi
 
 ip link add {{ iface }} type dummy

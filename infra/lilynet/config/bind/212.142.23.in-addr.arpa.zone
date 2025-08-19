@@ -1,6 +1,6 @@
 $TTL 900
 
-@	IN	SOA	ns1.daylily.network. noc.dayli.ly. ( 2025072501 3600 900 604800 900 )
+@	IN	SOA	ns1.daylily.network. noc.dayli.ly. ( 2025081201 3600 900 604800 900 )
 
 @	IN	NS	ns1.daylily.network.
 @	IN	NS	ns2.daylily.network.
