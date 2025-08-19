@@ -1,4 +1,5 @@
-from lilynet.schema import Node, Host, WgTemplate, Router
+from lilynet.schema import Direct, Node, Host, Upstream, WgTemplate, Router
+from lilynet.data.secrets import global_secrets
 
 nrt1: Node = Node(
     name="nrt1",
@@ -26,6 +27,18 @@ nrt1: Node = Node(
             "2620:d7:6003::/48",
         ],
     ),
+    upstreams=[
+        Upstream(
+            name="vultr",
+            asn=64515,
+            multihop=True,
+            underlay=Host(),  # Direct link on eth0
+            tunnel=Direct(
+                peer=Host(ipv4="169.254.169.254", ipv6="2001:19f0:ffff::1"),
+            ),
+            password=global_secrets["vultr_bgp_password"],
+        ),
+    ],
     dn42=Router(
         host=Host(
             ipv4="172.21.89.67",

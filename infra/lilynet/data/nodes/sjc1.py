@@ -1,4 +1,15 @@
-from lilynet.schema import Node, Dn42Peer, Wg, WgTemplate, Host, Router
+from lilynet.schema import (
+    Interface,
+    Node,
+    Dn42Peer,
+    Wg,
+    WgTemplate,
+    Host,
+    Router,
+    Upstream,
+    Direct,
+)
+from lilynet.data.secrets import global_secrets
 
 sjc1: Node = Node(
     name="sjc1",
@@ -26,6 +37,18 @@ sjc1: Node = Node(
             "2620:d7:6002::/48",
         ],
     ),
+    upstreams=[
+        Upstream(
+            name="vultr",
+            asn=64515,
+            multihop=True,
+            underlay=Host(),  # Direct link on eth0
+            tunnel=Direct(
+                peer=Host(ipv4="169.254.169.254", ipv6="2001:19f0:ffff::1"),
+            ),
+            password=global_secrets["vultr_bgp_password"],
+        ),
+    ],
     dn42=Router(
         host=Host(
             ipv4="172.21.89.66",
@@ -44,7 +67,7 @@ sjc1: Node = Node(
                 peer_port=51919,
                 peer=Host(ipv6="fe80::0207", ipv4="172.20.19.90"),
                 local_port=40207,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.66"),
             ),
         ),
         Dn42Peer(
@@ -56,7 +79,7 @@ sjc1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::1240:4", ipv4="172.20.209.13"),
                 local_port=41240,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.66"),
             ),
         ),
         Dn42Peer(
@@ -68,7 +91,7 @@ sjc1: Node = Node(
                 peer_port=59745,
                 peer=Host(ipv6="fe80::1588", ipv4="172.23.220.178"),
                 local_port=41588,
-                local_ll_ipv6="fe80::0100",
+                local=Interface(ipv6="fe80::0100", ipv4="172.21.89.66"),
             ),
         ),
         Dn42Peer(
@@ -80,7 +103,7 @@ sjc1: Node = Node(
                 peer_port=32613,
                 peer=Host(ipv6="fe80::9689:4c1b:770d:b0b7"),
                 local_port=41771,
-                local_ll_ipv6="fe80::1771",
+                local=Interface(ipv6="fe80::1771"),
             ),
         ),
         Dn42Peer(
@@ -92,7 +115,7 @@ sjc1: Node = Node(
                 peer_port=52320,
                 peer=Host(ipv6="fe80::2189:ef", ipv4="172.23.91.114"),
                 local_port=42189,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.66"),
             ),
         ),
         Dn42Peer(
@@ -104,7 +127,7 @@ sjc1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::2464"),
                 local_port=42464,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919"),
             ),
         ),
         Dn42Peer(
@@ -116,7 +139,7 @@ sjc1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::3035:132"),
                 local_port=43035,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919"),
             ),
         ),
         Dn42Peer(
@@ -128,7 +151,7 @@ sjc1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::ade0", ipv4="172.20.53.103"),
                 local_port=43914,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.66"),
             ),
         ),
     ],

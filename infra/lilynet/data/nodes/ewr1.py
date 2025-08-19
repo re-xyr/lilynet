@@ -1,4 +1,15 @@
-from lilynet.schema import Node, Dn42Peer, Host, Wg, WgTemplate, Router
+from lilynet.schema import (
+    Interface,
+    Node,
+    Dn42Peer,
+    Host,
+    Wg,
+    WgTemplate,
+    Router,
+    Upstream,
+    Direct,
+)
+from lilynet.data.secrets import global_secrets
 
 ewr1: Node = Node(
     name="ewr1",
@@ -26,6 +37,18 @@ ewr1: Node = Node(
             "2620:d7:6001::/48",
         ],
     ),
+    upstreams=[
+        Upstream(
+            name="vultr",
+            asn=64515,
+            multihop=True,
+            underlay=Host(),  # Direct link on eth0
+            tunnel=Direct(
+                peer=Host(ipv4="169.254.169.254", ipv6="2001:19f0:ffff::1"),
+            ),
+            password=global_secrets["vultr_bgp_password"],
+        ),
+    ],
     dn42=Router(
         host=Host(
             ipv4="172.21.89.65",
@@ -44,7 +67,7 @@ ewr1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::150"),
                 local_port=40150,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919"),
             ),
         ),
         Dn42Peer(
@@ -55,8 +78,8 @@ ewr1: Node = Node(
                 peer_pubkey="Yelo0BWe4ggUQ1jTKmC1Tq2Tqg1jyKiVU5xz+qY0yU0=",
                 peer_port=51919,
                 peer=Host(ipv6="fe80::0207", ipv4="172.20.19.69"),
-                local_port=40150,
-                local_ll_ipv6="fe80::1919",
+                local_port=40207,
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.65"),
             ),
         ),
         Dn42Peer(
@@ -68,7 +91,7 @@ ewr1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::1240:2", ipv4="172.20.209.11"),
                 local_port=41240,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.65"),
             ),
         ),
         Dn42Peer(
@@ -80,7 +103,7 @@ ewr1: Node = Node(
                 peer_port=53146,
                 peer=Host(ipv6="fe80::1588", ipv4="172.20.53.98"),
                 local_port=41588,
-                local_ll_ipv6="fe80::0100",
+                local=Interface(ipv6="fe80::0100", ipv4="172.21.89.65"),
             ),
         ),
         Dn42Peer(
@@ -92,7 +115,7 @@ ewr1: Node = Node(
                 peer_port=40005,
                 peer=Host(ipv6="fe80::e1f1:2bb1:b5c5:37d"),
                 local_port=41771,
-                local_ll_ipv6="fe80::1771",
+                local=Interface(ipv6="fe80::1771"),
             ),
         ),
         Dn42Peer(
@@ -104,7 +127,7 @@ ewr1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::1816", ipv4="172.23.246.3"),
                 local_port=41816,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.65"),
             ),
         ),
         Dn42Peer(
@@ -116,7 +139,7 @@ ewr1: Node = Node(
                 peer_port=52644,
                 peer=Host(ipv6="fe80::2189:e8", ipv4="172.23.91.117"),
                 local_port=42189,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.65"),
             ),
         ),
         Dn42Peer(
@@ -128,7 +151,7 @@ ewr1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::2464"),
                 local_port=42464,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919"),
             ),
         ),
         Dn42Peer(
@@ -140,7 +163,7 @@ ewr1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::3035:137"),
                 local_port=43035,
-                local_ll_ipv6="fe80::1919",
+                local=Interface(ipv6="fe80::1919"),
             ),
         ),
         Dn42Peer(
@@ -152,7 +175,7 @@ ewr1: Node = Node(
                 peer_port=21919,
                 peer=Host(ipv6="fe80::ade0", ipv4="172.20.16.139"),
                 local_port=43914,
-                local_ll_ipv6="fe80::ade1",
+                local=Interface(ipv6="fe80::ade1", ipv4="172.21.89.65"),
             ),
         ),
     ],

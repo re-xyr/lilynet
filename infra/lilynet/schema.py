@@ -8,15 +8,47 @@ class Host:
     ipv4: str | None = None
     ipv6: str | None = None
 
+    def get_ip(self) -> str:
+        if self.ipv6:
+            return self.ipv6
+        elif self.ipv4:
+            return self.ipv4
+        else:
+            raise ValueError("Host must have either ipv4 or ipv6 set")
+
+    def get_hostname(self) -> str:
+        if self.hostname:
+            return self.hostname
+        else:
+            return self.get_ip()
+
 
 @dataclass
-class Wg:
+class Interface(Host):
+    _: KW_ONLY
+    ipv4_mask: int | None = None  # If none, we make this a point-to-point link
+    ipv6_mask: int | None = 64
+
+
+@dataclass
+class Tunnel:
+    _: KW_ONLY
+    peer: Host
+
+
+@dataclass
+class Direct(Tunnel):
+    _: KW_ONLY
+
+
+@dataclass
+class Wg(Tunnel):
     _: KW_ONLY
     peer_port: int
     peer_pubkey: str
-    peer: Host
-    local_port: int
-    local_ll_ipv6: str
+    local_port: int | None = None  # If none, then we use PersistentKeepalive
+    local: Interface
+    local_privkey: str | None = None  # Set to none to use the node-default key
 
 
 @dataclass
@@ -41,6 +73,19 @@ class Dn42Peer:
 
 
 @dataclass
+class Upstream:
+    _: KW_ONLY
+    name: str
+    asn: int
+    ipv4: bool = True
+    ipv6: bool = True
+    multihop: bool = False
+    underlay: Host
+    tunnel: Tunnel
+    password: str | None = None
+
+
+@dataclass
 class Router:
     _: KW_ONLY
     host: Host
@@ -57,27 +102,9 @@ class Node:
     underlay: Host
     wg: WgTemplate
     clearnet: Router | None = None
+    upstreams: list[Upstream] = field(default_factory=list)
     dn42: Router | None = None
     dn42_peers: list[Dn42Peer] = field(default_factory=list)
 
     def __repr__(self) -> str:
         return f"<Node {self.name}>"
-
-
-@dataclass
-class NodeSecrets:
-    _: KW_ONLY
-    wg_privkey: str
-
-    def __repr__(self) -> str:
-        return "<NodeSecrets>"
-
-
-@dataclass
-class GlobalSecrets:
-    _: KW_ONLY
-    cloudflare_api_token: str
-    vultr_bgp_password: str
-
-    def __repr__(self) -> str:
-        return "<GlobalSecrets>"

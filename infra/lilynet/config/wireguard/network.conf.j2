@@ -1,5 +1,5 @@
 [Interface]
-PrivateKey = {{ local_secrets.wg_privkey }}
+PrivateKey = {{ local_secrets["wg_privkey"] }}
 ListenPort = {{ node.wg.local_port }}
 
 Address = {{ local.wg.peer_ll_ipv6 }}/64

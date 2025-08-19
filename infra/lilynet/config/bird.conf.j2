@@ -129,11 +129,8 @@ protocol static dn42_rpki_v6 {
   include "/etc/bird/roa_dn42_v6.conf";
 }
 
-protocol bgp clearnet_upstream_vultr_v4 {
+template bgp upstream {
   local as CLEARNET_OWNAS;
-  neighbor 169.254.169.254 as 64515;
-  multihop;
-  password "{{ global_secrets.vultr_bgp_password }}";
 
   ipv4 {
     import none;
@@ -142,13 +139,6 @@ protocol bgp clearnet_upstream_vultr_v4 {
       accept;
     };
   };
-}
-
-protocol bgp clearnet_upstream_vultr_v6 {
-  local as CLEARNET_OWNAS;
-  neighbor 2001:19f0:ffff::1 as 64515;
-  multihop;
-  password "{{ global_secrets.vultr_bgp_password }}";
 
   ipv6 {
     import none;
@@ -158,6 +148,32 @@ protocol bgp clearnet_upstream_vultr_v6 {
     };
   };
 }
+
+{% for upstream in local.upstreams %}
+{% if upstream.ipv4 %}
+protocol bgp clearnet_upstream_{{ upstream.asn }}_v4 from upstream {
+  neighbor {{ upstream.tunnel.peer.ipv4 }} as {{ upstream.asn }};
+  {% if upstream.multihop %}
+  multihop;
+  {% endif %}
+  {% if upstream.password %}
+  password "{{ upstream.password }}";
+  {% endif %}
+}
+{% endif %}
+
+{% if upstream.ipv6 %}
+protocol bgp clearnet_upstream_{{ upstream.asn }}_v6 from upstream {
+  neighbor {{ upstream.tunnel.peer.ipv6 }} as {{ upstream.asn }};
+  {% if upstream.multihop %}
+  multihop;
+  {% endif %}
+  {% if upstream.password %}
+  password "{{ upstream.password }}";
+  {% endif %}
+}
+{% endif %}
+{% endfor %}
 
 template bgp dnpeers {
   local as DN42_OWNAS;

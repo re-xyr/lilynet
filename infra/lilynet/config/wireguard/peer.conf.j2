@@ -1,17 +1,37 @@
 [Interface]
-PrivateKey = {{ local_secrets.wg_privkey }}
-ListenPort = {{ peer.wg.local_port }}
+{% if peer.wg.local_privkey %}
+PrivateKey = {{ peer.wg.local_privkey }}
+{% else %}
+PrivateKey = {{ local_secrets["wg_privkey"] }}
+{% endif %}
 
-Address = {{ peer.wg.local_ll_ipv6 }}/64
+{% if not peer.wg.local_port is none %}
+ListenPort = {{ peer.wg.local_port }}
+{% endif %}
+
 Table = off
 
-{% if peer.wg.peer.ipv4 %}
-PostUp = ip addr add {{ local.dn42.host.ipv4 }} peer {{ peer.wg.peer.ipv4 }} dev %i
+{% if peer.wg.local.ipv4 %}
+{% if peer.wg.local.ipv4_mask is none %}
+PostUp = ip addr add {{ peer.wg.local.ipv4 }} peer {{ peer.wg.peer.ipv4 }} dev %i
 {% else %}
-PostUp = ip addr add {{ local.dn42.host.ipv4 }}/32 dev %i
+PostUp = ip addr add {{ peer.wg.local.ipv4 }}/{{ peer.wg.local.ipv4_mask }} dev %i
+{% endif %}
+{% endif %}
+
+{% if peer.wg.local.ipv6 %}
+{% if peer.wg.local.ipv6_mask is none %}
+PostUp = ip addr add {{ peer.wg.local.ipv6 }} peer {{ peer.wg.peer.ipv6 }} dev %i
+{% else %}
+PostUp = ip addr add {{ peer.wg.local.ipv6 }}/{{ peer.wg.local.ipv6_mask }} dev %i
+{% endif %}
 {% endif %}
 
 [Peer]
 PublicKey = {{ peer.wg.peer_pubkey }}
-Endpoint = {{ peer.underlay.hostname }}:{{ peer.wg.peer_port }}
+Endpoint = {{ peer.underlay.get_hostname() }}:{{ peer.wg.peer_port }}
 AllowedIPs = fe80::/64, fd00::/8, 172.20.0.0/14, 10.0.0.0/8, 172.31.0.0/16
+
+{% if peer.wg.local_port is none %}
+PersistentKeepalive = 25
+{% endif %}
