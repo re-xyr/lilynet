@@ -166,5 +166,17 @@ sjc1: Node = Node(
                 local=Interface(ipv6="fe80::1919", ipv4="172.21.89.66"),
             ),
         ),
+        Dn42Peer(
+            name="iyoroy",
+            asn=4242422024,
+            underlay=Host(hostname="ipv4.lax-us.ecs.iyoroy-infra.top"),
+            wg=Wg(
+                peer_pubkey="As0rZo5b9Bwt4loPGl6iSdtOqkd2p6ExK/Xyoy9OmTU=",
+                peer_port=21919,
+                peer=Host(ipv6="fe80::2024"),
+                local_port=42024,
+                local=Interface(ipv6="fe80::1919"),
+            ),
+        ),
     ],
 )
