@@ -154,5 +154,17 @@ sjc1: Node = Node(
                 local=Interface(ipv6="fe80::1919", ipv4="172.21.89.66"),
             ),
         ),
+        Dn42Peer(
+            name="cowgl",
+            asn=4242423999,
+            underlay=Host(hostname="lax.node.cowgl.xyz"),
+            wg=Wg(
+                peer_pubkey="jhOukGNAKHI8Ivn8uI1TS25n5ho/rVlKFfenGmwCVlg=",
+                peer_port=31919,
+                peer=Host(ipv6="fe80::2:3999", ipv4="172.22.144.66"),
+                local_port=43999,
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.66"),
+            ),
+        ),
     ],
 )

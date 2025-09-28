@@ -178,5 +178,17 @@ ewr1: Node = Node(
                 local=Interface(ipv6="fe80::ade1", ipv4="172.21.89.65"),
             ),
         ),
+        Dn42Peer(
+            name="cowgl",
+            asn=4242423999,
+            underlay=Host(hostname="yyz.node.cowgl.xyz"),
+            wg=Wg(
+                peer_pubkey="XGIBvqoUOgb8IiLIWtO9JVNZc4SEpEAM1eWh26MtoRE=",
+                peer_port=31919,
+                peer=Host(ipv6="fe80::5:3999", ipv4="172.22.144.69"),
+                local_port=43999,
+                local=Interface(ipv6="fe80::1919", ipv4="172.21.89.65"),
+            ),
+        ),
     ],
 )
