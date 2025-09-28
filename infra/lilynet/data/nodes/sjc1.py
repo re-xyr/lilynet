@@ -107,6 +107,18 @@ sjc1: Node = Node(
             ),
         ),
         Dn42Peer(
+            name="iyoroy",
+            asn=4242422024,
+            underlay=Host(hostname="ipv4.lax-us.ecs.iyoroy-infra.top"),
+            wg=Wg(
+                peer_pubkey="As0rZo5b9Bwt4loPGl6iSdtOqkd2p6ExK/Xyoy9OmTU=",
+                peer_port=21919,
+                peer=Host(ipv6="fe80::2024"),
+                local_port=42024,
+                local=Interface(ipv6="fe80::1919"),
+            ),
+        ),
+        Dn42Peer(
             name="ideon",
             asn=4242422189,
             underlay=Host(hostname="us-lax.dn42.kuu.moe"),
@@ -143,6 +155,18 @@ sjc1: Node = Node(
             ),
         ),
         Dn42Peer(
+            name="jasonxu",
+            asn=4242423658,
+            underlay=Host(hostname="23.178.72.73"),
+            wg=Wg(
+                peer_pubkey="uA0q51QKx3JoU6me/Q1IW6Nu/IwS9nIdKk+XydhM1S4=",
+                peer_port=21919,
+                peer=Host(ipv6="fd4e:d0:d38d:f7d1::1"),
+                local_port=43658,
+                local=Interface(ipv6="fd11:4514:1919:2::1", ipv6_mask=None),
+            ),
+        ),
+        Dn42Peer(
             name="kioubit",
             asn=4242423914,
             underlay=Host(hostname="us3.g-load.eu"),
@@ -164,18 +188,6 @@ sjc1: Node = Node(
                 peer=Host(ipv6="fe80::2:3999", ipv4="172.22.144.66"),
                 local_port=43999,
                 local=Interface(ipv6="fe80::1919", ipv4="172.21.89.66"),
-            ),
-        ),
-        Dn42Peer(
-            name="iyoroy",
-            asn=4242422024,
-            underlay=Host(hostname="ipv4.lax-us.ecs.iyoroy-infra.top"),
-            wg=Wg(
-                peer_pubkey="As0rZo5b9Bwt4loPGl6iSdtOqkd2p6ExK/Xyoy9OmTU=",
-                peer_port=21919,
-                peer=Host(ipv6="fe80::2024"),
-                local_port=42024,
-                local=Interface(ipv6="fe80::1919"),
             ),
         ),
     ],
