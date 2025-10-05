@@ -11,10 +11,10 @@ from lilynet.schema import (
 )
 from lilynet.data.secrets import global_secrets
 
-ewr1: Node = Node(
-    name="ewr1",
+nyc1: Node = Node(
+    name="nyc1",
     underlay=Host(
-        hostname="ewr1.node.dayli.ly",
+        hostname="nyc1.node.dayli.ly",
         ipv4="207.148.28.92",
         ipv6="2001:19f0:1000:9985:5400:05ff:fe69:4b94",
     ),
@@ -25,7 +25,7 @@ ewr1: Node = Node(
     ),
     clearnet=Router(
         host=Host(
-            hostname="ewr1.daylily.network",
+            hostname="nyc1.daylily.network",
             ipv6="2620:d7:6001::1",
             ipv4="23.142.212.254",
         ),

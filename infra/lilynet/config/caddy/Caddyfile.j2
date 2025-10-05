@@ -16,14 +16,12 @@
 }
 
 localhost,
-{{ local.name }}.daylily.network,
-{{ local.name }}.net.dayli.ly {
+{{ local.name }}.daylily.network {
 	import serve
 }
 
 daylily.network,
-www.daylily.network,
-net.dayli.ly {
+www.daylily.network {
 	tls {
 		dns cloudflare {{ global_secrets["cloudflare_api_token"] }}
 		dns_challenge_override_domain _acme-challenge.net.dayli.ly

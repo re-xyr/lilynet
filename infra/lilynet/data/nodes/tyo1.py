@@ -1,10 +1,10 @@
 from lilynet.schema import Direct, Node, Host, Upstream, WgTemplate, Router
 from lilynet.data.secrets import global_secrets
 
-nrt1: Node = Node(
-    name="nrt1",
+tyo1: Node = Node(
+    name="tyo1",
     underlay=Host(
-        hostname="nrt1.node.dayli.ly",
+        hostname="tyo1.node.dayli.ly",
         ipv4="198.13.50.205",
         ipv6="2001:19f0:7002:10ad:5400:05ff:fe8b:d267",
     ),
@@ -15,7 +15,7 @@ nrt1: Node = Node(
     ),
     clearnet=Router(
         host=Host(
-            hostname="nrt1.daylily.network",
+            hostname="tyo1.daylily.network",
             ipv6="2620:d7:6003::1",
             ipv4="23.142.212.252",
         ),

@@ -1,7 +1,7 @@
 dn42 = (
     [
-        ("ewr1.node.dayli.ly", {}),
-        ("nrt1.node.dayli.ly", {}),
+        ("nyc1.node.dayli.ly", {}),
+        ("tyo1.node.dayli.ly", {}),
         ("sjc1.node.dayli.ly", {}),
     ],
     {
