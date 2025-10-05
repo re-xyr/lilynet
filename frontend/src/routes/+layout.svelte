@@ -31,7 +31,7 @@ const description = "Lilynet (AS401736, AS4242421919) is daylily's personal expe
   <meta property="og:site_name" content="dayli.ly" />
 </svelte:head>
 
-<div class="flex min-h-dvh flex-col items-center px-4 py-12">
+<div class="flex min-h-dvh flex-col items-center bg-stone-100 px-4 py-12 text-stone-800">
   <div class="flex w-full max-w-xl grow flex-col gap-12">
     <header class="flex flex-row items-center gap-2">
       <h1 class="text-xl font-bold">
@@ -40,8 +40,8 @@ const description = "Lilynet (AS401736, AS4242421919) is daylily's personal expe
           Lilynet
         </a>
       </h1>
-      <div class="grow text-neutral-600">{page.url.pathname}</div>
-      <div class="text-sm text-neutral-600">
+      <div class="grow text-stone-600">{page.url.pathname}</div>
+      <div class="text-sm text-stone-600">
         {data.meta.node}
         {#if data.meta.anycast}anycast{/if}
       </div>
@@ -51,13 +51,13 @@ const description = "Lilynet (AS401736, AS4242421919) is daylily's personal expe
       {@render children()}
     </main>
 
-    <footer class="flex flex-row items-center text-sm text-gray-500">
+    <footer class="flex flex-row items-center text-sm text-stone-500">
       <p class="grow">
         Powered by <a
           href="https://svelte.dev"
           target="_blank"
           rel="noopener noreferrer"
-          class="underline"
+          class="underline hover:no-underline"
         >
           SvelteKit
         </a>
@@ -67,7 +67,7 @@ const description = "Lilynet (AS401736, AS4242421919) is daylily's personal expe
           href="https://dayli.ly"
           target="_blank"
           rel="noopener noreferrer"
-          class="underline">Project Daylily</a
+          class="underline hover:no-underline">Project Daylily</a
         >
       </p>
     </footer>

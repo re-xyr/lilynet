@@ -9,3 +9,23 @@
     'Ubuntu Sans Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
 }
+
+@variant hover (&:hover);
+
+@layer utilities {
+  .prose {
+    a {
+      font-weight: inherit;
+      @apply text-cyan-900 decoration-1 hover:no-underline;
+    }
+
+    :not(pre) code {
+      font-weight: inherit;
+
+      &::before,
+      &::after {
+        @apply hidden;
+      }
+    }
+  }
+}
