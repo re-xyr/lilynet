@@ -71,6 +71,18 @@ sjc1: Node = Node(
             ),
         ),
         Dn42Peer(
+            name="nedifinita",
+            asn=4242420454,
+            underlay=Host(hostname="dn42a.nedifinita.com"),
+            wg=Wg(
+                peer_pubkey="8EXT6zciVdil3Zg6dqB0YT2SssTh2OTKDeBBfrVGUkE=",
+                peer_port=50931,
+                peer=Host(ipv6="fe80::454"),
+                local_port=40454,
+                local=Interface(ipv6="fe80::1919"),
+            ),
+        ),
+        Dn42Peer(
             name="prefixlabs",
             asn=4242421240,
             underlay=Host(hostname="us-03.prefixlabs.net"),
