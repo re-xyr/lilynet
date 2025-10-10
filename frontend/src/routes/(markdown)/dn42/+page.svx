@@ -43,11 +43,11 @@ All the information you will need to peer with me is listed below. All WireGuard
 
 Currently there are two nodes in this network.
 
-### US East / New Jersey (`ewr1`)
+### US East / New Jersey (`nyc1`)
 
 | Key                  | Value                                          |
 | -------------------- | ---------------------------------------------- |
-| WireGuard Endpoint   | `ewr1.dn42.dayli.ly:4[xxxx]`                   |
+| WireGuard Endpoint   | `nyc1.dn42.dayli.ly:4[xxxx]`                   |
 | WireGuard Public Key | `F6YGAEiF7VLd2r2DW/jX7vC8235b4DJf6HD29gRi6gg=` |
 | dn42 IPv4            | `172.21.89.65`                                 |
 | dn42 IPv6            | `fd11:4514:1919:1::1`                          |
