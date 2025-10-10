@@ -8,8 +8,8 @@ server.hostname(hostname=host.name)
 # Disable password authentication for SSH
 
 files.put(
-    src="lilynet/config/cloud/cloud.cfg.d/99-no-pwauth.cfg",
-    dest="/etc/cloud/cloud.cfg.d/99-no-pwauth.cfg",
+    src="lilynet/config/ssh/sshd_config.d/30-no-pwauth.conf",
+    dest="/etc/ssh/sshd_config.d/30-no-pwauth.conf",
 )
 
 # Enable IP forwarding in sysctl
